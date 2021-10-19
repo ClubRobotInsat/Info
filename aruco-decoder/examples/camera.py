@@ -6,7 +6,7 @@ cam = cv2.VideoCapture(0)
 ar = ArucoDetector()
 
 while True:
-    _, frame = cap.read()
+    _, frame = cam.read()
     cv2.imshow('Input', frame)
 
     codes = ar.read_frame(frame)
