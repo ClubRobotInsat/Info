@@ -37,6 +37,3 @@ jobs:
         cd ./aruco-decoder
         python -m unittest discover ./tests/
         cd ../
-    - name: Test with pytest
-      run: |
-        pytest
