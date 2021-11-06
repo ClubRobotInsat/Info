@@ -12,13 +12,6 @@ Clone the repository
 git clone https://github.com/ClubRobotInsat/Info
 ```
 
-Create a virtual environment and activate it
-```
-cd aruco-decoder
-python -m venv venv
-venv/script/activate
-```
-
 Install the dependencies
 ```commandline
 pip3 install -r requirements.txt
@@ -27,7 +20,7 @@ pip3 install -r requirements.txt
 ## Project Directories
 
 - [`datasets`](datasets): Stores images for processing and testing
-- [`aruco`](aruco): library
+- [`aruco.py`](aruco.py): library
 - [`tests`](tests): A bunch of unitary tests
 
 ## Usage
@@ -42,11 +35,11 @@ img = "your-image-path"
 
 print(ar.read_image(img))
 ```
-Check [image.py](./examples/image.py)
+Check [image.py](example-image.py)
 
 ### From the webcam
 
-Check [camera.py](./examples/camera.py)
+Check [camera.py](example-camera.py)
 
 ## Unittest
 
