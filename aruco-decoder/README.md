@@ -20,7 +20,7 @@ pip3 install -r requirements.txt
 ## Project Directories
 
 - [`datasets`](datasets): Stores images for processing and testing
-- [`aruco.py`](aruco.py): library
+- [`aruco.py`](aruco/aruco.py): library
 - [`tests`](tests): A bunch of unitary tests
 
 ## Usage
