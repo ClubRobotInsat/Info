@@ -1,3 +1,7 @@
+# to start searching the modules from the parent folder
+import sys
+sys.path.append("..")
+
 import os
 import unittest
 
@@ -11,17 +15,17 @@ class TestArucoDetectionGreen(unittest.TestCase):
     GREEN = 36
 
     def test_green(self):
-        result = self.ar.read_image(os.path.abspath("./datasets/green.jpg"))
+        result = self.ar.read_image("./datasets/green.jpg")
         self.assertEqual(self.GREEN, result)
 
     def test_green_tilted_r(self):
-        result = self.ar.read_image(os.path.abspath("./datasets/green-tilted-r.jpg"))
+        result = self.ar.read_image("./datasets/green-tilted-r.jpg")
         self.assertEqual(self.GREEN, result)
 
     def test_green_reverse(self):
-        result = self.ar.read_image(os.path.abspath("./datasets/green-reverse.jpg"))
+        result = self.ar.read_image("./datasets/green-reverse.jpg")
         self.assertEqual(self.GREEN, result)
 
     def test_green_tilted_l(self):
-        result = self.ar.read_image(os.path.abspath("./datasets/green-tilted-l.jpg"))
+        result = self.ar.read_image("./datasets/green-tilted-l.jpg")
         self.assertEqual(self.GREEN, result)

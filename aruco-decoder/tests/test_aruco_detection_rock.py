@@ -1,3 +1,7 @@
+# to start searching the modules from the parent folder
+import sys
+sys.path.append("..")
+
 import os
 import unittest
 
@@ -11,17 +15,17 @@ class TestArucoDetectionRock(unittest.TestCase):
     ROCK = 17
 
     def test_rock(self):
-        result = self.ar.read_image(os.path.abspath("./datasets/rock.jpg"))
+        result = self.ar.read_image("./datasets/rock.jpg")
         self.assertEqual(self.ROCK, result)
 
     def test_rock_tilted_r(self):
-        result = self.ar.read_image(os.path.abspath("./datasets/rock-tilted-r.jpg"))
+        result = self.ar.read_image("./datasets/rock-tilted-r.jpg")
         self.assertEqual(self.ROCK, result)
 
     def test_rock_reverse(self):
-        result = self.ar.read_image(os.path.abspath("./datasets/rock-reverse.jpg"))
+        result = self.ar.read_image("./datasets/rock-reverse.jpg")
         self.assertEqual(self.ROCK, result)
 
     def test_rock_tilted_l(self):
-        result = self.ar.read_image(os.path.abspath("./datasets/rock-tilted-l.jpg"))
+        result = self.ar.read_image("./datasets/rock-tilted-l.jpg")
         self.assertEqual(self.ROCK, result)
