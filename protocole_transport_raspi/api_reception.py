@@ -2,7 +2,7 @@ import sys
 import subprocess
 from time import sleep
 from threading import Thread
-
+from multiprocessing import Process, Manager
 
 id_raspi = 0 
 # nb de stm/raspi connectés
@@ -12,9 +12,14 @@ nb_mess=8
 # nb de trames max par message 
 nb_trames = 16 
 keys = [(id_or,id_mes) for id_or in range(nb_disp) for id_mes in range(nb_mess)]
+
+# pour partager le buffer 
+manager = Manager()
+buffer = manager.dict()
 # buffer pour l'application : dictionnaire avec key = (id_or,id_mes) 
 # liste contenant les divers datas 
 buffer = {key:[None]*nb_trames for key in keys}
+
 
 def test_variables(id_dest,id_or,id_mes,seq,ack): 
     print("variables récupérées :")
@@ -31,7 +36,7 @@ def test_buffer(id_or,id_mes):
         if txt != None : 
             print(txt)
 
-def process_mess(mess):
+def process_mess(mess,buffer):
     print("process message...")
     #récupérer les différents champs de l'en-tête dans des variables
     mess=mess.split(" ") ## TODO adapter au format des messages reçus par le candump 
@@ -55,12 +60,12 @@ def test_reception():
 
     # 0000 0001 001 0010 0
     print("appel de process mess avec en tête 0 1 1 2 0")
-    process_mess("1 36 hola tu")
+    process_mess("1 36 hola tu",buffer)
     print("\n")
 
     # 0100 0001 001 0010 0 
     print("appel de process mess avec en tête 4 1 1 2 0")
-    process_mess("65 36 hola tu")
+    process_mess("65 36 hola tu",buffer)
     print("\n")
 
     print("test de la mise dans le buffer")
@@ -68,21 +73,28 @@ def test_reception():
     print("\n")
 
     # 0000 0001 001 0001 0 
-    process_mess("1 34 que tal")
+    process_mess("1 34 que tal",buffer)
     print("\n")
     # 0000 0001 001 0000 0 
-    (id_or,id_mes) = process_mess("1 32 kfjdjk")
+    (id_or,id_mes) = process_mess("1 32 kfjdjk",buffer)
     print("\n")
     test_buffer(id_or,id_mes)
     print("--------------------------------------------------------------------------------------------")
 
 # réception 
-def reception():
+def reception(buffer):
     reception = subprocess.Popen(["candump","any"],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     # reception=subprocess.Popen(['ping', 'geekflare.com'], stdout=subprocess.PIPE, text=True)
     while True: 
         output=reception.stdout.readline()
         if output:
-            process_mess(output.strip()) #output.strip() est un string 
+            process_mess(output.strip(),buffer) #output.strip() est un string 
+
+# ça serait top d'arriver à lancer l'appli comme un process mais en mettant le code dans un autre fichier sinon ça va être infâme 
+# et sinon, je sais pas comment lui passer le buffer comme argument 
+def main(): 
+    proc_reception=Process(target=reception,args=(buffer,)) 
+    proc_reception.start()
+    proc_reception.join()
 
 test_reception()
