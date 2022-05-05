@@ -3,6 +3,7 @@ import subprocess
 from time import sleep
 from threading import Thread
 from multiprocessing import Process, Manager
+from multiprocessing.shared_memory import SharedMemory
 
 id_raspi = 0 
 # nb de stm/raspi connectés
@@ -14,11 +15,12 @@ nb_trames = 16
 keys = [(id_or,id_mes) for id_or in range(nb_disp) for id_mes in range(nb_mess)]
 
 # pour partager le buffer 
-manager = Manager()
-buffer = manager.dict()
+#manager = Manager()
+#buffer = manager.dict()
 # buffer pour l'application : dictionnaire avec key = (id_or,id_mes) 
 # liste contenant les divers datas 
-buffer = {key:[None]*nb_trames for key in keys}
+# sys.getsizeof(buffer)=4696
+#buffer = {key:[None]*nb_trames for key in keys}
 
 
 def test_variables(id_dest,id_or,id_mes,seq,ack): 
@@ -30,7 +32,7 @@ def test_variables(id_dest,id_or,id_mes,seq,ack):
     print("ack =",ack)
 
 
-def test_buffer(id_or,id_mes):
+def test_buffer(id_or,id_mes,buffer):
     print("message placé dans le buffer : ")
     for txt in reversed(buffer[(id_or,id_mes)]):
         if txt != None : 
@@ -55,7 +57,7 @@ def process_mess(mess,buffer):
     print("message processé!")
     return (id_or,id_mes)
 
-def test_reception(): 
+def test_reception(buffer): 
     print("--------------------------------test de la réception------------------------------------")
 
     # 0000 0001 001 0010 0
@@ -78,7 +80,7 @@ def test_reception():
     # 0000 0001 001 0000 0 
     (id_or,id_mes) = process_mess("1 32 kfjdjk",buffer)
     print("\n")
-    test_buffer(id_or,id_mes)
+    test_buffer(id_or,id_mes,buffer)
     print("--------------------------------------------------------------------------------------------")
 
 # réception 
@@ -90,11 +92,5 @@ def reception(buffer):
         if output:
             process_mess(output.strip(),buffer) #output.strip() est un string 
 
-# ça serait top d'arriver à lancer l'appli comme un process mais en mettant le code dans un autre fichier sinon ça va être infâme 
-# et sinon, je sais pas comment lui passer le buffer comme argument 
-def main(): 
-    proc_reception=Process(target=reception,args=(buffer,)) 
-    proc_reception.start()
-    proc_reception.join()
-
-test_reception()
+def main(buffer): 
+    test_reception(buffer)
