@@ -1,26 +1,8 @@
-import sys
 import subprocess
-from time import sleep
-from threading import Thread
-from multiprocessing import Process, Manager
-from multiprocessing.shared_memory import SharedMemory
+from buffer import print_ligne_buff
+
 
 id_raspi = 0 
-# nb de stm/raspi connectés
-nb_disp=16
-# nb de messages différents pouvant être envoyés en simultané par le même dispositif
-nb_mess=8
-# nb de trames max par message 
-nb_trames = 16 
-keys = [(id_or,id_mes) for id_or in range(nb_disp) for id_mes in range(nb_mess)]
-
-# pour partager le buffer 
-#manager = Manager()
-#buffer = manager.dict()
-# buffer pour l'application : dictionnaire avec key = (id_or,id_mes) 
-# liste contenant les divers datas 
-# sys.getsizeof(buffer)=4696
-#buffer = {key:[None]*nb_trames for key in keys}
 
 
 def test_variables(id_dest,id_or,id_mes,seq,ack): 
@@ -31,12 +13,6 @@ def test_variables(id_dest,id_or,id_mes,seq,ack):
     print("seq =",seq)
     print("ack =",ack)
 
-
-def test_buffer(id_or,id_mes,buffer):
-    print("message placé dans le buffer : ")
-    for txt in reversed(buffer[(id_or,id_mes)]):
-        if txt != None : 
-            print(txt)
 
 def process_mess(mess,buffer):
     print("process message...")
@@ -80,10 +56,10 @@ def test_reception(buffer):
     # 0000 0001 001 0000 0 
     (id_or,id_mes) = process_mess("1 32 kfjdjk",buffer)
     print("\n")
-    test_buffer(id_or,id_mes,buffer)
+    print_ligne_buff(id_or,id_mes)
     print("--------------------------------------------------------------------------------------------")
 
-# réception 
+# réception : à mettre dans le main quand opérationnel 
 def reception(buffer):
     reception = subprocess.Popen(["candump","any"],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     # reception=subprocess.Popen(['ping', 'geekflare.com'], stdout=subprocess.PIPE, text=True)
