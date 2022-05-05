@@ -30,9 +30,9 @@ buffer = {key:[] for key in keys}
 # pour tester 
 def print_ligne_buff(id_or,id_mes):
     print("(",id_or,",",id_mes,") : ")
-    for txt in buffer[(id_or,id_mes)]:
-        if txt != None : 
-            print(txt)
+    for mess in buffer[(id_or,id_mes)]:
+        if mess != None : 
+            print(mess.data)
 
 def test_variables(id_dest,id_or,id_mes,seq,ack): 
     print("variables récupérées :")
@@ -54,9 +54,15 @@ def process_mess(mess,buffer):
         print("ce message n'est pas pour moi")
         return 
     #si le message est pour moi, traiter et mettre dans buffer  
-    # test_variables(id_dest,id_or,id_mes,seq,ack)
-    # TODO : append dans l'ordre même si les messages ne sont pas envoyés dans l'ordre 
-    buffer[(mess.id_or,mess.id_mes)].append(mess.data)
+    ligne_buff = buffer[(mess.id_or,mess.id_mes)]
+    if not ligne_buff:
+        ligne_buff.append(mess)
+    elif ligne_buff[-1].seq < mess.seq: # messages pas dans l'ordre 
+        dernier = ligne_buff[-1]
+        ligne_buff[-1] = mess
+        ligne_buff.append(dernier)
+    else: 
+        ligne_buff.append(mess)
     # TODO : mettre le message dans la queue si il est terminé 
     print("message processé!")
     return (mess.id_or,mess.id_mes)
@@ -75,14 +81,15 @@ def test_reception():
     print("\n")
 
     print("test de la mise dans le buffer")
-    print("data envoyée : hola tu que tal kfjdjk")
+    print("data envoyée dans le désordre: hola tu que tal kfjdjk")
+    print("\n")
+    
+    # 0000 0001 001 0000 0 
+    (id_or,id_mes) = process_mess("1 32 kfjdjk",buffer)
     print("\n")
 
     # 0000 0001 001 0001 0 
     process_mess("1 34 que tal",buffer)
-    print("\n")
-    # 0000 0001 001 0000 0 
-    (id_or,id_mes) = process_mess("1 32 kfjdjk",buffer)
     print("\n")
     print_ligne_buff(id_or,id_mes)
     print("--------------------------------------------------------------------------------------------")
