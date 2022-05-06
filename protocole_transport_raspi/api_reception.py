@@ -1,16 +1,25 @@
 import subprocess
 
 
-class Message(object):
+class Trame(object):
 
     def __init__(self,mess):
         self.id_dest = int(mess[0])>>4
         self.id_or = int(mess[0])&15 
         self.id_mes = int(mess[1])>>5
         self.seq = (int(mess[1])>>1)&15
-        self.ack = int(mess[1])&1   
+        self.ack = int(mess[1])&1   # TODO : process les ack 
         self.data = mess[2:]
-    
+
+
+class Message(object): 
+    def __init__(self,id_or,id_mes):
+        self.id_or=id_or
+        self.id_mes=id_mes
+        self.data=[]
+        for trame in buffer[(id_or,id_mes)]:
+            self.data.extend(trame.data)
+
 
 
 id_raspi = 0 
@@ -43,41 +52,45 @@ def test_variables(id_dest,id_or,id_mes,seq,ack):
     print("ack =",ack)
 
 
-def process_mess(mess,buffer):
-    print("process message...")
+def process_mess(trame,buffer):
+    print("process Trame...")
     #récupérer les différents champs de l'en-tête dans des variables
-    mess=mess.split(" ") ## TODO adapter au format des messages reçus par le candump, 
+    trame=trame.split(" ") ## TODO adapter au format des trames reçus par le candump, 
     # et peut-être aussi vérifier que le format du string reçu est le bon  
-    mess=Message(mess)
-    #si le message est pas pour moi return 
-    if mess.id_dest != id_raspi:
+    trame=Trame(trame)
+    #si le Trame est pas pour moi return 
+    if trame.id_dest != id_raspi:
         print("ce message n'est pas pour moi")
         return 
     #si le message est pour moi, traiter et mettre dans buffer  
-    ligne_buff = buffer[(mess.id_or,mess.id_mes)]
+    ligne_buff = buffer[(trame.id_or,trame.id_mes)]
     if not ligne_buff:
-        ligne_buff.append(mess)
-    elif ligne_buff[-1].seq < mess.seq: # messages pas dans l'ordre 
+        ligne_buff.append(trame)
+    elif ligne_buff[-1].seq < trame.seq: # trames pas dans l'ordre 
         dernier = ligne_buff[-1]
-        ligne_buff[-1] = mess
+        ligne_buff[-1] = trame
         ligne_buff.append(dernier)
     else: 
-        ligne_buff.append(mess)
+        ligne_buff.append(trame)
     # TODO : mettre le message dans la queue si il est terminé 
-    print("message processé!")
-    return (mess.id_or,mess.id_mes)
+    # message reçu en entier : 
+    # dernière trame reçue (seq == 0) et toutes les trames sont là 
+    if ((ligne_buff[-1].seq==0) and (len(ligne_buff)==ligne_buff[0].seq+1)): 
+        message=Message(trame.id_or,trame.id_mes)
+    print("Trame processée!")
+    return (trame.id_or,trame.id_mes) #pour débug 
 
 def test_reception(): 
     print("--------------------------------test de la réception------------------------------------")
 
-    # 0000 0001 001 0010 0
-    print("appel de process mess avec en tête 0 1 1 2 0")
-    process_mess("1 36 hola tu",buffer)
-    print("\n")
-
     # 0100 0001 001 0010 0 
     print("appel de process mess avec en tête 4 1 1 2 0")
     process_mess("65 36 hola tu",buffer)
+    print("\n")
+
+    # 0000 0001 001 0010 0
+    print("appel de process mess avec en tête 0 1 1 2 0")
+    process_mess("1 36 hola tu",buffer)
     print("\n")
 
     print("test de la mise dans le buffer")
@@ -91,7 +104,7 @@ def test_reception():
     # 0000 0001 001 0001 0 
     process_mess("1 34 que tal",buffer)
     print("\n")
-    print_ligne_buff(id_or,id_mes)
+    # print_ligne_buff(id_or,id_mes)
     print("--------------------------------------------------------------------------------------------")
 
 # réception : à mettre dans le main pour tester en conditions réelles  
