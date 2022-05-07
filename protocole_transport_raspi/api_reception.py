@@ -1,5 +1,4 @@
 import subprocess
-from queue import Queue
 from utiles import Trame,Message,buffer
 
 id_raspi = 0 
@@ -90,5 +89,4 @@ def reception(q):
 
 def main(q): 
     test_reception(q)
-    # print("data reçue dans api :", q.get())
     

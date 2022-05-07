@@ -2,7 +2,5 @@ from time import sleep
 
 
 def f2(q):
-    print("je dors...")
-    sleep(5)
+    print("f2 prend dans la queue")
     print(q.get())    
-    q.put([42, None, 'hola'])

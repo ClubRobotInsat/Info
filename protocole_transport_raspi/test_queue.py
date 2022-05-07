@@ -9,9 +9,7 @@ if __name__ == '__main__':
     p1 = Process(target=f2,args=(q,))
     p1.start()
     p.start()
-    print("j'attends...")
     # print(q.get())    # prints "[42, None, 'hello']"
-    sleep(7)
-    print(q.get()) 
+    # print(q.get()) 
     p.join()
     p1.join()
