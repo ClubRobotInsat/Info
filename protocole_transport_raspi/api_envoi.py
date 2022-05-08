@@ -1,3 +1,3 @@
 def main():
-    # cansend can0 <id>#{data} 
+    # cansend can0 <id>#{data}
     print("message envoyé!")

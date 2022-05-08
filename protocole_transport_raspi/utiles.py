@@ -14,6 +14,8 @@ class Message(object):
         self.id_or=id_or
         self.id_mes=id_mes
         self.data=[]
+        if (id_or,id_mes)==(-1,-1): # permet de créer un message vide 
+            return
         for trame in buffer[(id_or,id_mes)]:
             self.data.extend(trame.data)
 
