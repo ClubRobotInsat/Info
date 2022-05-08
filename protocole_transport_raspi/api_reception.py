@@ -46,10 +46,16 @@ def test_reception(q):
     process_mess("1 34 que tal",q)
     print("\n")
     # print_ligne_buff(id_or,id_mes)
+
+
+    # TODO : more tests 
+
     print("--------------------------------------------------------------------------------------------")
 
 ###############################################################################################################
 
+
+# TODO : processer les ack
 def process_mess(trame,q):
     print("process Trame...")
     trame=trame.split(" ") ## TODO adapter au format des trames reçus par le candump, 
