@@ -1,7 +1,6 @@
 import subprocess
 from utiles import Trame,Message,buffer
-
-id_raspi = 0 
+from utiles import id_raspi
 
 
 # pour tester 
@@ -56,7 +55,7 @@ def test_reception(q):
 
 
 # TODO : processer les ack
-def process_mess(trame,q):
+def process_mess(trame,q,q_envoi):
     print("process Trame...")
     trame=trame.split(" ") ## TODO adapter au format des trames reçus par le candump, 
     # et peut-être aussi vérifier que le format du string reçu est le bon  
@@ -64,6 +63,10 @@ def process_mess(trame,q):
     #si la trame est pas pour moi return 
     if trame.id_dest != id_raspi:
         print("ce message n'est pas pour moi")
+        return 
+    # si le message est un ack, on le passe à l'api d'envoi 
+    if trame.ack==1: 
+        q_envoi.put(trame)
         return 
     #si le message est pour moi, traiter et mettre dans buffer  
     ligne_buff = buffer[(trame.id_or,trame.id_mes)]
@@ -86,13 +89,13 @@ def process_mess(trame,q):
 
 
 # réception : à mettre dans le main pour tester en conditions réelles  
-def reception(q):
+def reception(q,q_envoi):
     reception = subprocess.Popen(["candump","any"],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     while True: 
         output=reception.stdout.readline()
         if output:
             process_mess(output.strip(),q) #output.strip() est un string 
 
-def main(q): 
-    test_reception(q)
+def main(q,q_envoi): 
+    test_reception(q,q_envoi)
     
