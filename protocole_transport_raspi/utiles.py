@@ -3,7 +3,8 @@ class Trame(object):
     def __init__(self,arg):
         # pour créer une trame depuis la réception à partir du message reçu par bash 
         if isinstance(arg,list):
-            self.id_dest = (int(arg[0],16))>>4 # passer des string à des int (et il prend en compte que c'est de l'hexa avec le 16)
+            # self.id_dest = (int(arg[0],16))>>4 # passer des string à des int (et il prend en compte que c'est de l'hexa avec le 16)
+            self.id_dest=arg[0]>>4
             self.id_or = int(arg[0],16)&15 
             self.id_mes = int(arg[1],16)>>5
             self.seq = (int(arg[1],16)>>1)&15
