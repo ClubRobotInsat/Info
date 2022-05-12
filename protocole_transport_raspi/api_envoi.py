@@ -1,4 +1,5 @@
 from utiles import Message, Trame 
+import subprocess
 from utiles import nb_trames as trames_max
 from utiles import size_payload
 
@@ -13,9 +14,12 @@ def envoyer(id_dest,data):
     to_send=data
     trame=Trame(id_dest)
     while to_send: 
-        trame.data=to_send[:size_payload-1]
+        trame.data=+to_send[:size_payload-1]
         to_send=to_send[size_payload-1:]
         # send trame 
+        str_trame=trame.to_string() # TODO 
+        envoi = subprocess.Popen(["cansend","can0",str_trame],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+
         # cansend can0 <id>#{data}
     # reduce pour vérifier que tous les ack ont été reçus 
     print("message envoyé!")
