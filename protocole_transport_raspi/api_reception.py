@@ -57,9 +57,7 @@ def test_reception(q,q_envoi):
 # TODO : processer les ack
 def process_mess(trame,q,q_envoi):
     print("process Trame...")
-    trame=str(trame).split(" ") ## TODO adapter au format des trames reçus par le candump, 
-    trame=trame[3:]
-    trame=Trame(trame)
+    trame=Trame(trame[17:]) # pour virer l'en tête du candump, j'ai trouvé que c'était 17 de façon empirique 
     test_variables(trame)
     #si la trame est pas pour moi return 
     if trame.id_dest != id_raspi:
