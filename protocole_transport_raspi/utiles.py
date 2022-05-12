@@ -14,12 +14,15 @@ class Trame(object):
             self.ack=0
             self.data= []
         else:
-            self.id_dest=arg[0]>>4
-            self.id_or = int(arg[0],16)&15 
-            self.id_mes = int(arg[1],16)>>5
-            self.seq = (int(arg[1],16)>>1)&15
-            self.ack = int(arg[1],16)&1   # TODO : process les ack 
-            self.data = arg[2:]
+            self.id_dest=arg>>60
+            self.id_or = (arg>>56)&0b00001111 
+            self.id_mes = (arg>>53)&0b00000000111
+            self.seq=(arg>>49)&0b000000000001111
+            self.ack=(arg>>48)&0b0000000000000001
+            self.data=(arg)&0x0000FFFFFFFFFFFF
+            #self.seq = (int(arg[1],16)>>1)&15
+            #self.ack = int(arg[1],16)&1   # TODO : process les ack 
+            #self.data = arg[2:]
 
 
 
