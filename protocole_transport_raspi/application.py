@@ -17,7 +17,5 @@ def recevoir(q):
 
 
 def main(q):
-    sleep(4)
-    if recevoir==message_vide: 
-        return
-    print(recevoir(q).data)
+    while(1):
+        print(q.get().data)

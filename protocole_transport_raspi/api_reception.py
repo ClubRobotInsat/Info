@@ -60,6 +60,7 @@ def process_mess(trame,q,q_envoi):
     trame=trame.split(" ") ## TODO adapter au format des trames reçus par le candump, 
     # et peut-être aussi vérifier que le format du string reçu est le bon  
     trame=Trame(trame)
+    test_variables()
     #si la trame est pas pour moi return 
     if trame.id_dest != id_raspi:
         print("ce message n'est pas pour moi")
