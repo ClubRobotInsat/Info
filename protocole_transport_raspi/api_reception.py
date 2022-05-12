@@ -57,7 +57,7 @@ def test_reception(q,q_envoi):
 # TODO : processer les ack
 def process_mess(trame,q,q_envoi):
     print("process Trame...")
-    trame=trame.split(" ") ## TODO adapter au format des trames reçus par le candump, 
+    trame=str(trame).split(" ") ## TODO adapter au format des trames reçus par le candump, 
     trame=trame[3:]
     trame=Trame(trame)
     test_variables(trame)
@@ -89,7 +89,6 @@ def process_mess(trame,q,q_envoi):
     return (trame.id_or,trame.id_mes) #pour débug 
 
 
-# réception : à mettre dans le main pour tester en conditions réelles  
 def reception(q,q_envoi):
     reception = subprocess.Popen(["candump","any"],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     while True: 
@@ -97,6 +96,3 @@ def reception(q,q_envoi):
         if output:
             process_mess(output.strip(),q,q_envoi) #output.strip() est un string 
 
-def main(q,q_envoi): 
-    test_reception(q,q_envoi)
-    # reception()
