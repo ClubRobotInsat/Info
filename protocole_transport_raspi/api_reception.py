@@ -12,37 +12,37 @@ def print_ligne_buff(id_or,id_mes):
         if mess != None : 
             print(mess.data)
 
-def test_variables(id_dest,id_or,id_mes,seq,ack): 
+def test_variables(trame): 
     print("variables récupérées :")
-    print("id_dest =",id_dest)
-    print("id_or =",id_or)
-    print("id_mes =",id_mes)
-    print("seq =",seq)
-    print("ack =",ack)
+    print("id_dest =",trame.id_dest)
+    print("id_or =",trame.id_or)
+    print("id_mes =",trame.id_mes)
+    print("seq =",trame.seq)
+    print("ack =",trame.ack)
 
-def test_reception(q): 
+def test_reception(q,q_envoi): 
     print("--------------------------------test de la réception------------------------------------")
 
     # 0100 0001 001 0010 0 
     print("appel de process mess avec en tête 4 1 1 2 0")
-    process_mess("65 36 hola tu",q)
+    process_mess("can0 001 [8] FF 24 01 01 01 01 01 01",q,q_envoi)
     print("\n")
 
     # 0000 0001 001 0010 0
     print("appel de process mess avec en tête 0 1 1 2 0")
-    process_mess("1 36 hola tu",q)
+    process_mess("can0 001 [8] 01 24 01 01 01 01 01 01",q,q_envoi)
     print("\n")
 
     print("test de la mise dans le buffer")
-    print("data envoyée dans le désordre: hola tu que tal kfjdjk")
+    
     print("\n")
     
     # 0000 0001 001 0000 0 
-    (id_or,id_mes) = process_mess("1 32 kfjdjk",q)
+    (id_or,id_mes) = process_mess("can0 001 [8] 01 20 01 01 01 01 01",q,q_envoi)
     print("\n")
 
     # 0000 0001 001 0001 0 
-    process_mess("1 34 que tal",q)
+    process_mess("can0 001 [8] 01 22 01 01 01 01 01",q,q_envoi)
     print("\n")
     # print_ligne_buff(id_or,id_mes)
 
@@ -58,9 +58,9 @@ def test_reception(q):
 def process_mess(trame,q,q_envoi):
     print("process Trame...")
     trame=trame.split(" ") ## TODO adapter au format des trames reçus par le candump, 
-    # et peut-être aussi vérifier que le format du string reçu est le bon  
+    trame=trame[3:]
     trame=Trame(trame)
-    test_variables()
+    test_variables(trame)
     #si la trame est pas pour moi return 
     if trame.id_dest != id_raspi:
         print("ce message n'est pas pour moi")
@@ -82,7 +82,7 @@ def process_mess(trame,q,q_envoi):
     # message reçu en entier : 
     # dernière trame reçue (seq == 0) et toutes les trames sont là 
     if ((ligne_buff[-1].seq==0) and (len(ligne_buff)==ligne_buff[0].seq+1)): 
-        message=Message(trame.id_or,trame.id_mes)
+        message=Message(trame.id_dest,trame.id_or,trame.id_mes)
         q.put(message)
 
     print("Trame processée!")
@@ -95,8 +95,8 @@ def reception(q,q_envoi):
     while True: 
         output=reception.stdout.readline()
         if output:
-            process_mess(output.strip(),q) #output.strip() est un string 
+            process_mess(output.strip(),q,q_envoi) #output.strip() est un string 
 
 def main(q,q_envoi): 
     test_reception(q,q_envoi)
-    
+    # reception()
