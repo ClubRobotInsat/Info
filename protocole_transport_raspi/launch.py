@@ -1,4 +1,4 @@
-from api_reception import main as reception
+from api_reception import reception as reception
 from application import main as app
 from api_envoi import process_ack 
 from multiprocessing import Process,Queue
