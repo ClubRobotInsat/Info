@@ -1,8 +1,7 @@
-from api_reception import reception as reception
+from api_reception import test_reception as reception
 from application import main as app
 from api_envoi import process_ack 
 from multiprocessing import Process,Queue
-# argument 0 : queue infinie 
 
 
 if __name__ == '__main__':# ne s'exécute que si le fichier est lancé directement (pas comme librairie) 
