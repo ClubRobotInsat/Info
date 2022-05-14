@@ -14,13 +14,13 @@ class Trame(object):
             self.ack=0
             self.data= []
         else:
-            self.id_dest=arg&0xF000000000000000
-            self.id_or = arg&0x0F00000000000000 
-            self.id_mes = arg&0x00E0000000000000
-            self.seq = (arg[1]>>1)&15
-            self.ack = arg[1]&1   # TODO : process les ack 
+            self.id_dest = int(arg[0],16)>>4
+            self.id_or = int(arg[0],16)&15 
+            self.id_mes = int(arg[1],16)>>5
+            self.seq = (int(arg[1],16)>>1)&15
+            self.ack = int(arg[1],16)&1   # TODO : process les ack 
             self.data = arg[2:]
-
+            
     def to_string(self):
         # TODO : trouver le moyen qu'il fasse un string avec des ff 
         return int(self.id_dest<<4 + self.id_or,16) 
