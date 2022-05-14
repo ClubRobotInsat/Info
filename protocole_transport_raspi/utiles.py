@@ -1,56 +1,65 @@
 class Trame(object):
 
-    def __init__(self,arg):
-        # pour créer une trame depuis la réception à partir du message reçu par bash 
-        #if isinstance(arg,list):
-            # self.id_dest = (int(arg[0],16))>>4 # passer des string à des int (et il prend en compte que c'est de l'hexa avec le 16)
-            
+    def __init__(self, arg):
+
         # pour créer une trame à envoyer depuis l'api d'envoi 
-        if isinstance(arg,int):
-            self.id_dest=arg
-            self.id_or=id_raspi
-            self.id_mes=0 # TODO : faire une variable statique pour éviter les redondances 
-            self.seq=0 # TODO : implémenter pour +ieurs trames / message 
-            self.ack=0
-            self.data= []
-        else:
-            self.id_dest = int(arg[0],16)>>4
-            self.id_or = int(arg[0],16)&15 
-            self.id_mes = int(arg[1],16)>>5
-            self.seq = (int(arg[1],16)>>1)&15
-            self.ack = int(arg[1],16)&1   # TODO : process les ack 
+        if isinstance(arg, int):
+            self.id_dest = arg
+            self.id_or = id_raspi
+            self.id_mes = 0  # TODO : faire une variable statique pour éviter les redondances
+            self.seq = 0  # TODO : implémenter pour +ieurs trames / message
+            self.ack = 0
+            self.data = []
+
+        else:  # pour créer une trame depuis la réception à partir du message reçu par bash
+            # passer des strings à des int (et il prend en compte que c'est de l'hexa avec le 16)
+            self.id_dest = int(arg[0], 16) >> 4
+            self.id_or = int(arg[0], 16) & 15
+            self.id_mes = int(arg[1], 16) >> 5
+            self.seq = (int(arg[1], 16) >> 1) & 15
+            self.ack = int(arg[1], 16) & 1  # TODO : process les ack
             self.data = arg[2:]
-            
+            # ATTENTION la data est sous forme de string TODO : vérifier que ça ne pose pas de soucis
+
     def to_string(self):
-        # TODO : trouver le moyen qu'il fasse un string avec des ff 
-        return int(self.id_dest<<4 + self.id_or,16) 
+        # bytes d'en tête
+        trame_bytes = [hex(self.id_dest << 4 | self.id_or), hex(self.id_mes << 5 | self.seq << 1 | self.ack)]
+        # bytes de data
+        for d in self.data:
+            trame_bytes.append(d)
+        trame_str = ""
+        for byte in trame_bytes:
+            trame_str += str(byte)
+            trame_str += " "
+        trame_str = trame_str.replace("0x", "")
+        return trame_str
 
 
-class Message(object): 
-    def __init__(self,id_dest,id_or,id_mes,data=[]):
-        self.id_dest=id_dest
-        self.id_or=id_or
-        self.id_mes=id_mes
-        self.data=data
-        if (id_or,id_mes)==(-1,-1): # permet de créer un message vide 
+class Message(object):
+    def __init__(self, id_dest, id_or, id_mes, data=None):
+        if data is None:
+            data = []
+        self.id_dest = id_dest
+        self.id_or = id_or
+        self.id_mes = id_mes
+        self.data = data
+        if (id_or, id_mes) == (-1, -1):  # permet de créer un message vide
             return
-        for trame in buffer[(id_or,id_mes)]:
+        for trame in buffer_reception[(id_or, id_mes)]:
             self.data.extend(trame.data)
 
 
+id_raspi = 0
+
 # nb d'octets de data par trame 
-size_payload=6
+size_payload = 6
 # nb de stm/raspi connectés
-nb_disp=16
+nb_disp = 16
 # nb de messages différents pouvant être envoyés en simultané par le même dispositif
-nb_mess=8
+nb_mess = 8
 # nb de trames max par message 
-nb_trames = 16 
-keys = [(id_or,id_mes) for id_or in range(nb_disp) for id_mes in range(nb_mess)]
+nb_trames = 16
 
-id_raspi = 0 
-
-
-# dictionnaire avec key = (id_or,id_mes) 
-buffer = {key:[] for key in keys}
-print(str(((15<<4)+1)))
+# dictionnaire avec key = (id_or,id_mes)
+keys = [(id_or, id_mes) for id_or in range(nb_disp) for id_mes in range(nb_mess)]
+buffer_reception = {key: [] for key in keys}
