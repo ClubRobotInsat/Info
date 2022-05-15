@@ -28,6 +28,7 @@ def envoyer(id_dest, data):
 
 # TODO : implémenter pour des messages de plus d'un trame
 def process_ack(q_envoi):
-    while (1):
+    while True:
         trame = q_envoi.get()
         # comment dire à envoyer que l'ack a bien été reçu?
+        # TODO : regarder timeout et condition comme en c

@@ -1,12 +1,14 @@
 class Trame(object):
 
-    def __init__(self, arg):
+    mes_counter = 0
 
-        # pour créer une trame à envoyer depuis l'api d'envoi 
+    def __init__(self, arg):
+        # pour créer une trame à envoyer depuis l'api d'envoi
         if isinstance(arg, int):
             self.id_dest = arg
             self.id_or = id_raspi
-            self.id_mes = 0  # TODO : faire une variable statique pour éviter les redondances
+            self.id_mes = Trame.mes_counter
+            Trame.mes_counter = (Trame.mes_counter+1) % nb_mess
             self.seq = 0  # TODO : implémenter pour +ieurs trames / message
             self.ack = 0
             self.data = []
@@ -19,7 +21,7 @@ class Trame(object):
             self.seq = (int(arg[1], 16) >> 1) & 15
             self.ack = int(arg[1], 16) & 1  # TODO : process les ack
             self.data = arg[2:]
-            # ATTENTION la data est sous forme de string TODO : vérifier que ça ne pose pas de soucis
+            # ATTENTION la data est sous forme de liste de strings
 
     def to_string(self):
         # bytes d'en tête
@@ -63,3 +65,4 @@ nb_trames = 16
 # dictionnaire avec key = (id_or,id_mes)
 keys = [(id_or, id_mes) for id_or in range(nb_disp) for id_mes in range(nb_mess)]
 buffer_reception = {key: [] for key in keys}
+
