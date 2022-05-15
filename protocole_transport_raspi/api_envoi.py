@@ -6,23 +6,25 @@ from utiles import nb_trames as trames_max
 from utiles import size_payload
 from utiles import buffer_acks
 from math import ceil
-from bisect import insort
+from multiprocessing import Condition
+
+# timeout pour la réception des acks
+timeout = 3
 
 
-def test_envoi():
-    for i in range(10):
-        envoyer(Message(3, 0,
+def test_envoi(ack_received):
+    envoyer(Message(3, 0,
                         ['FF', 'EE', 'AA', 'AA', 'CC', 'BB', '01', '01', '01', '01', '01', 'CC', '01', '01', '01', '01',
-                         '01', '01', '01']))
+                         '01', '01', '01']), ack_received)
 
     # TODO : more tests
-    envoyer(Message(9, 0, ['00']))
-    envoyer(Message(88, 0, ['']))
-    envoyer(Message(9, 9, ['']))
-    envoyer(Message(1, 0, "ksjhflsdkfghsldfvb"))
+    envoyer(Message(9, 0, ['00']), ack_received)
+    envoyer(Message(88, 0, ['']), ack_received)
+    envoyer(Message(9, 9, ['']), ack_received)
+    envoyer(Message(1, 0, "ksjhflsdkfghsldfvb"), ack_received)
 
 
-def envoyer(message):
+def envoyer(message, ack_received):
     if message.id_dest < 0 or message.id_dest > utiles.nb_disp:
         print("ce destinataire n'existe pas")
         return
@@ -40,7 +42,6 @@ def envoyer(message):
 
     to_send = message.data
     seq = nb_trames - 1
-    print("seq = ",seq)
     buffer_acks[message.id_dest, message.id_mes] = seq
     while to_send:
         trame = Trame((message.id_dest, message.id_mes, seq))
@@ -50,18 +51,23 @@ def envoyer(message):
         str_trame = trame.to_string()
         # subprocess.Popen(["cansend", "can0", str_trame], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
         #                stderr=subprocess.PIPE)
-        print(str_trame)
+        # print(str_trame)
         seq -= 1
     # wait avec un timeout
-    print("message envoyé!")
+    ack_received.acquire()
+    if ack_received.wait(timeout):
+        print("message envoyé!")
+        print("#######################message envoyé dans sa totalité######################")
+    else:
+        print("échec de l'envoi du message, timeout expiré")
 
 
 def process_ack(trame, ack_received):
     print("process ack...")
-    # reduce pour vérifier que tous les ack ont été reçus
     buffer_acks[trame.id_or, trame.id_mes] -= 1
     ligne_buff = buffer_acks[trame.id_or, trame.id_mes]
     # on a reçu tous les acks
     if ligne_buff == 0:
-        print("#######################message envoyé dans sa totalité######################")
+        ack_received.acquire()
+        ack_received.notify_all()
     print(ligne_buff)
