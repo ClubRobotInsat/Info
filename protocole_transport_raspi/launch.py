@@ -1,18 +1,13 @@
 from api_reception import test_reception as reception
 from application import main as app
-from api_envoi import process_ack
-from multiprocessing import Process,Queue
+from multiprocessing import Process, Queue, Condition
 
-
-if __name__ == '__main__':# ne s'exécute que si le fichier est lancé directement (pas comme librairie) 
+if __name__ == '__main__':  # ne s'exécute que si le fichier est lancé directement (pas comme librairie)
     q = Queue()
-    q_envoi= Queue()
-    proc_reception=Process(target=reception,args=(q,q_envoi,)) 
-    proc_app=Process(target=app,args=(q,))
-    # proc_envoi=Process(target=process_ack,args=(q_envoi,))
+    ack_received = Condition()
+    proc_reception = Process(target=reception, args=(q, ack_received,))
+    proc_app = Process(target=app, args=(q, ack_received))
     proc_reception.start()
     proc_app.start()
-    # proc_envoi.start()
     proc_reception.join()
     proc_app.join()
-    # proc_envoi.join()

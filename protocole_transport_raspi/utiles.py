@@ -1,15 +1,12 @@
 class Trame(object):
 
-    mes_counter = 0
-
     def __init__(self, arg):
         # pour créer une trame à envoyer depuis l'api d'envoi
-        if isinstance(arg, int):
-            self.id_dest = arg
+        if isinstance(arg, tuple):
+            self.id_dest = arg[0]
             self.id_or = id_raspi
-            self.id_mes = Trame.mes_counter
-            Trame.mes_counter = (Trame.mes_counter+1) % nb_mess
-            self.seq = 0  # TODO : implémenter pour +ieurs trames / message
+            self.id_mes = arg[1]
+            self.seq = arg[2]
             self.ack = 0
             self.data = []
 
@@ -29,7 +26,7 @@ class Trame(object):
         # bytes de data
         for d in self.data:
             trame_bytes.append(d)
-        trame_str = ""
+        trame_str = "000#"  # un truc du cansend, je sais pas vraiment à quoi ça sert
         for byte in trame_bytes:
             trame_str += str(byte)
             trame_str += " "
@@ -38,17 +35,14 @@ class Trame(object):
 
 
 class Message(object):
-    def __init__(self, id_dest, id_or, id_mes, data=None):
-        if data is None:
-            data = []
+    mes_counter = 0
+
+    def __init__(self, id_dest, id_or, data):
+        self.data = data
         self.id_dest = id_dest
         self.id_or = id_or
-        self.id_mes = id_mes
-        self.data = data
-        if (id_or, id_mes) == (-1, -1):  # permet de créer un message vide
-            return
-        for trame in buffer_reception[(id_or, id_mes)]:
-            self.data.extend(trame.data)
+        self.id_mes = Message.mes_counter
+        Message.mes_counter = (Message.mes_counter + 1) % nb_mess
 
 
 id_raspi = 0
@@ -62,7 +56,12 @@ nb_mess = 8
 # nb de trames max par message 
 nb_trames = 16
 
-# dictionnaire avec key = (id_or,id_mes)
+# dictionnaire avec keys = (id_or,id_mes)
 keys = [(id_or, id_mes) for id_or in range(nb_disp) for id_mes in range(nb_mess)]
+
+# buffer où la réception met les trames en attendant que le message soit reçu au complet
 buffer_reception = {key: [] for key in keys}
 
+# buffer où l'envoi met les acks reçus
+# chaque ligne du buffer contient le nb de trames du message, décrémenté à chaque réception de ack
+buffer_acks = {key: [0] for key in keys}
