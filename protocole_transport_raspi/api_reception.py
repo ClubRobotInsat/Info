@@ -89,7 +89,7 @@ def process_mess(trame, q, ack_received):
     trame = trame.split(" ")
     trame = Trame(trame[3:])  # trame [3:] pour virer l'en tête du candump
 
-    test_variables(trame)
+    # test_variables(trame)
 
     # si la trame est pas pour moi return
     if trame.id_dest != id_raspi:
