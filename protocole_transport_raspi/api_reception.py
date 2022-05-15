@@ -55,19 +55,25 @@ def test_reception(q, ack_received):
     print("\n")
 
     # TODO : more tests
-    # 0000 1000 111 0010 1
-    print("appel de process mess avec en tête 0 8 7 2 1")
-    process_mess("can0 001 [8] 08 E5 01 01 01 01 01 01", q, ack_received)
+    # tests des acks :
+    # 0000 0011 000 0010 1
+    print("appel de process mess avec en tête 0 3 0 2 1")
+    process_mess("can0 001 [8] 03 05 01 01 01 01 01 01", q, ack_received)
     print("\n")
 
-    # 0000 1000 111 0001 1
-    print("appel de process mess avec en tête 0 8 7 0 1")
-    process_mess("can0 001 [8] 08 E3 01 01 01 01 01 01", q, ack_received)
+    # 0000 0011 000 0011 1
+    print("appel de process mess avec en tête 0 3 0 3 1")
+    process_mess("can0 001 [8] 03 07 01 01 01 01 01 01", q, ack_received)
     print("\n")
 
-    # 0000 1000 111 0000 1
-    print("appel de process mess avec en tête 0 8 7 1 1")
-    process_mess("can0 001 [8] 08 E1 01 01 01 01 01 01", q, ack_received)
+    # 0000 0011 000 0000 1
+    print("appel de process mess avec en tête 0 3 0 0 1")
+    process_mess("can0 001 [8] 03 01 01 01 01 01 01 01", q, ack_received)
+    print("\n")
+
+    # 0000 0011 000 0001 1
+    print("appel de process mess avec en tête 0 3 0 1 1")
+    process_mess("can0 001 [8] 03 03 01 01 01 01 01 01", q, ack_received)
     print("\n")
 
     print("--------------------------------------------------------------------------------------------")
@@ -84,15 +90,18 @@ def process_mess(trame, q, ack_received):
     trame = Trame(trame[3:])  # trame [3:] pour virer l'en tête du candump
 
     test_variables(trame)
+
     # si la trame est pas pour moi return
     if trame.id_dest != id_raspi:
         print("ce message n'est pas pour moi")
         return
+
     # si le message est un ack, on le passe à l'api d'envoi
     if trame.ack == 1:
         print("ack reçu, passage à process_ack")
         process_ack(trame, ack_received)
         return
+
     # si le message est pour moi, traiter et mettre dans buffer
     ligne_buff = buffer_reception[(trame.id_or, trame.id_mes)]
     # append dans le buffer dans l'ordre
@@ -104,6 +113,7 @@ def process_mess(trame, q, ack_received):
         ligne_buff.append(dernier)
     else:
         ligne_buff.append(trame)
+
     # message reçu en entier : 
     # dernière trame reçue (seq == 0) et toutes les trames sont là 
     if (ligne_buff[-1].seq == 0) and (len(ligne_buff) == ligne_buff[0].seq + 1):
