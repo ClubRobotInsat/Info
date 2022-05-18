@@ -24,56 +24,56 @@ def test_variables(trame):
     print("ack =", trame.ack)
 
 
-def test_reception(q, ack_received):
+def test_reception(q, ack_received,lock_buffer_envoi):
     print("--------------------------------test de la réception------------------------------------")
 
     # 0100 0001 001 0010 0 
     print("appel de process mess avec en tête 4 1 1 2 0")
-    process_mess("can0 001 [8] 41 24 01 01 01 01 01 01", q, ack_received)
+    process_mess("can0 001 [8] 41 24 01 01 01 01 01 01", q, ack_received,lock_buffer_envoi)
     print("\n")
 
     # 0000 0001 001 0010 0
     print("appel de process mess avec en tête 0 1 1 2 0")
-    process_mess("can0 001 [8] 01 24 FF EE AA AA CC BB", q, ack_received)
+    process_mess("can0 001 [8] 01 24 FF EE AA AA CC BB", q, ack_received,lock_buffer_envoi)
     print("\n")
 
     # 0000 0001 001 0000 0
     print("appel de process mess avec en tête 0 1 1 0 0")
 
-    process_mess("can0 001 [8] 01 20 01 01 01 01 01 01", q, ack_received)
+    process_mess("can0 001 [8] 01 20 01 01 01 01 01 01", q, ack_received,lock_buffer_envoi)
     print("\n")
 
     # 0000 0001 001 0001 0 
     print("appel de process mess avec en tête 0 1 1 1 0")
 
-    process_mess("can0 001 [8] 01 22 01 01 01 01 01 01", q, ack_received)
+    process_mess("can0 001 [8] 01 22 01 01 01 01 01 01", q, ack_received,lock_buffer_envoi)
     print("\n")
 
     # 1111 1000 111 1100 1 
     print("appel de process mess avec en tête 15 8 7 12 1")
-    process_mess("can0 001 [8] F8 F9 01 01 01 01 01 01", q, ack_received)
+    process_mess("can0 001 [8] F8 F9 01 01 01 01 01 01", q, ack_received,lock_buffer_envoi)
     print("\n")
 
     # TODO : more tests
     # tests des acks :
     # 0000 0011 000 0010 1
     print("appel de process mess avec en tête 0 3 0 2 1")
-    process_mess("can0 001 [8] 03 05 01 01 01 01 01 01", q, ack_received)
+    process_mess("can0 001 [8] 03 05 01 01 01 01 01 01", q, ack_received,lock_buffer_envoi)
     print("\n")
 
     # 0000 0011 000 0011 1
     print("appel de process mess avec en tête 0 3 0 3 1")
-    process_mess("can0 001 [8] 03 07 01 01 01 01 01 01", q, ack_received)
+    process_mess("can0 001 [8] 03 07 01 01 01 01 01 01", q, ack_received,lock_buffer_envoi)
     print("\n")
 
     # 0000 0011 000 0000 1
     print("appel de process mess avec en tête 0 3 0 0 1")
-    process_mess("can0 001 [8] 03 01 01 01 01 01 01 01", q, ack_received)
+    process_mess("can0 001 [8] 03 01 01 01 01 01 01 01", q, ack_received,lock_buffer_envoi)
     print("\n")
 
     # 0000 0011 000 0001 1
     print("appel de process mess avec en tête 0 3 0 1 1")
-    process_mess("can0 001 [8] 03 03 01 01 01 01 01 01", q, ack_received)
+    process_mess("can0 001 [8] 03 03 01 01 01 01 01 01", q, ack_received,lock_buffer_envoi)
     print("\n")
 
     print("--------------------------------------------------------------------------------------------")
@@ -82,8 +82,8 @@ def test_reception(q, ack_received):
 ###############################################################################################################
 
 
-# TODO : processer les ack
-def process_mess(trame, q, ack_received):
+# TODO : processer les ack avec condition
+def process_mess(trame, q, ack_received, lock_buffer_envoi):
     print("process Trame...")
 
     trame = trame.split(" ")
@@ -99,7 +99,7 @@ def process_mess(trame, q, ack_received):
     # si le message est un ack, on le passe à l'api d'envoi
     if trame.ack == 1:
         print("ack reçu, passage à process_ack")
-        process_ack(trame, ack_received)
+        process_ack(trame, ack_received, lock_buffer_envoi)
         return
 
     # si le message est pour moi, traiter et mettre dans buffer
@@ -114,6 +114,15 @@ def process_mess(trame, q, ack_received):
     else:
         ligne_buff.append(trame)
 
+    # envoyer ack de la trame
+    trame_ack = Trame((trame.id_or, trame.id_mes, trame.seq), ack=1)
+    str_trame_ack = trame_ack.to_string()
+    # subprocess.Popen(["cansend", "can0", str_trame], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+    #                stderr=subprocess.PIPE)
+    print("ack envoyé")
+    print(str_trame_ack)
+
+
     # message reçu en entier : 
     # dernière trame reçue (seq == 0) et toutes les trames sont là 
     if (ligne_buff[-1].seq == 0) and (len(ligne_buff) == ligne_buff[0].seq + 1):
@@ -127,10 +136,10 @@ def process_mess(trame, q, ack_received):
     print("Trame processée!")
 
 
-def reception(q, ack_received):
+def reception(q, ack_received, lock_buffer_envoi):
     reception_bash = subprocess.Popen(["candump", "any"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE)
     while True:
         output = reception_bash.stdout.readline()
         if output:
-            process_mess(output.strip().decode(), q, ack_received)  # output.strip() est un string
+            process_mess(output.strip().decode(), q, ack_received, lock_buffer_envoi)  # output.strip() est un string
