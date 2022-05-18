@@ -6,7 +6,7 @@ from utiles import id_raspi
 # pour créer un message à envoyer : message = Message(id_dest, id_raspi, data)
 # l'id_mes est assignée automatiquement par le protocole
 
-def main(q, ack_received):  # ack_received doit être passé à la méthode envoyer pour que la réception des acks se
+def main(q, ack_received, lock_buffer_acks):  # ack_received et lock_buffer_acks doivent être passés à la méthode envoyer pour que la réception des acks se
     # passe bien
     while True:
         if not q.empty():

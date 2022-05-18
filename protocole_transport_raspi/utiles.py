@@ -1,14 +1,14 @@
 class Trame(object):
 
-    def __init__(self, arg):
+    def __init__(self, arg, ack=0):
         # pour créer une trame à envoyer depuis l'api d'envoi
         if isinstance(arg, tuple):
             self.id_dest = arg[0]
             self.id_or = id_raspi
             self.id_mes = arg[1]
             self.seq = arg[2]
-            self.ack = 0
-            self.data = []
+            self.ack = ack
+            self.data = ['00' for i in range(size_payload)]
 
         else:  # pour créer une trame depuis la réception à partir du message reçu par bash
             # passer des strings à des int (et il prend en compte que c'est de l'hexa avec le 16)
@@ -16,7 +16,7 @@ class Trame(object):
             self.id_or = int(arg[0], 16) & 15
             self.id_mes = int(arg[1], 16) >> 5
             self.seq = (int(arg[1], 16) >> 1) & 15
-            self.ack = int(arg[1], 16) & 1  # TODO : process les ack
+            self.ack = int(arg[1], 16) & 1
             self.data = arg[2:]
             # ATTENTION la data est sous forme de liste de strings
 
