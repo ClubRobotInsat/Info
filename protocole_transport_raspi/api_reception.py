@@ -23,34 +23,34 @@ def test_variables(trame):
     print("ack =", trame.ack)
 
 
-def test_reception(q, buffer_acks):
+def test_reception(q, buffer_acks, ack_received_cond):
     print("--------------------------------test de la réception------------------------------------")
 
-    # 0100 0001 001 0010 0 
-    print("appel de process mess avec en tête 4 1 1 2 0")
-    process_mess("can0 001 [8] 41 24 01 01 01 01 01 01", q, buffer_acks)
+    # 0000 0001 001 0000 0
+    print("appel de process mess avec en tête 0 1 1 0 0")
+    process_mess("can0 001 [8] 01 20 01 01 01 01 01 01", q, buffer_acks, ack_received_cond)
     print("\n")
 
     # 0000 0001 001 0010 0
     print("appel de process mess avec en tête 0 1 1 2 0")
-    process_mess("can0 001 [8] 01 24 FF EE AA AA CC BB", q, buffer_acks)
+    process_mess("can0 001 [8] 01 24 FF EE AA AA CC BB", q, buffer_acks, ack_received_cond)
     print("\n")
 
     # 0000 0001 001 0000 0
     print("appel de process mess avec en tête 0 1 1 0 0")
 
-    process_mess("can0 001 [8] 01 20 01 01 01 01 01 01", q, buffer_acks)
+    process_mess("can0 001 [8] 01 20 01 01 01 01 01 01", q, buffer_acks, ack_received_cond)
     print("\n")
 
     # 0000 0001 001 0001 0 
     print("appel de process mess avec en tête 0 1 1 1 0")
 
-    process_mess("can0 001 [8] 01 22 01 01 01 01 01 01", q, buffer_acks)
+    process_mess("can0 001 [8] 01 22 01 01 01 01 01 01", q, buffer_acks, ack_received_cond)
     print("\n")
 
     # 1111 1000 111 1100 1 
     print("appel de process mess avec en tête 15 8 7 12 1")
-    process_mess("can0 001 [8] F8 F9 01 01 01 01 01 01", q, buffer_acks)
+    process_mess("can0 001 [8] F8 F9 01 01 01 01 01 01", q, buffer_acks, ack_received_cond)
     print("\n")
 
     sleep(1)
@@ -58,22 +58,22 @@ def test_reception(q, buffer_acks):
     # tests des acks :
     # 0000 0011 000 0010 1
     print("appel de process mess avec en tête 0 3 0 2 1")
-    process_mess("can0 001 [8] 03 05 01 01 01 01 01 01", q, buffer_acks)
+    process_mess("can0 001 [8] 03 05 01 01 01 01 01 01", q, buffer_acks, ack_received_cond)
     print("\n")
 
     # 0000 0011 000 0011 1
     print("appel de process mess avec en tête 0 3 0 3 1")
-    process_mess("can0 001 [8] 03 07 01 01 01 01 01 01", q, buffer_acks)
+    process_mess("can0 001 [8] 03 07 01 01 01 01 01 01", q, buffer_acks, ack_received_cond)
     print("\n")
 
     # 0000 0011 000 0000 1
     print("appel de process mess avec en tête 0 3 0 0 1")
-    process_mess("can0 001 [8] 03 01 01 01 01 01 01 01", q, buffer_acks)
+    process_mess("can0 001 [8] 03 01 01 01 01 01 01 01", q, buffer_acks, ack_received_cond)
     print("\n")
 
     # 0000 0011 000 0001 1
     print("appel de process mess avec en tête 0 3 0 1 1")
-    process_mess("can0 001 [8] 03 03 01 01 01 01 01 01", q, buffer_acks)
+    process_mess("can0 001 [8] 03 03 01 01 01 01 01 01", q, buffer_acks, ack_received_cond)
     print("\n")
 
     print("--------------------------------------------------------------------------------------------")
@@ -83,7 +83,7 @@ def test_reception(q, buffer_acks):
 
 
 # TODO : processer les ack avec condition
-def process_mess(trame, q, buffer_acks):
+def process_mess(trame, q, buffer_acks, ack_received_cond ):
     print("process Trame...")
 
     trame = trame.split(" ")
@@ -105,6 +105,11 @@ def process_mess(trame, q, buffer_acks):
         # on a reçu tous les acks
         if buffer_acks[trame.id_or, trame.id_mes] == 0:
             print("tous les acks reçus")
+            ack_received_cond.acquire()
+            ack_received_cond.notify_all()
+            ack_received_cond.release()
+
+
         print("ligne buff : ", buffer_acks[trame.id_or, trame.id_mes])
 
     return
@@ -138,6 +143,7 @@ def process_mess(trame, q, buffer_acks):
             data.extend(trame.data)
         message = Message(trame.id_dest, trame.id_or, data)
         q.put(message)
+        q.task_done()
         print("message placé dans la file d'attente pour l'appli")
 
     print("Trame processée!")
