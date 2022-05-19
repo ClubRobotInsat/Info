@@ -61,6 +61,7 @@ def envoyer(message, buffer_acks, ack_received_cond):
             trame.data = trame.data + ['00' for _ in range(size_payload - len(trame.data))]
         # send trame 
         str_trame = trame.to_string()
+        print("envoi de : ", str_trame)
         # TODO : uncomment to test
         subprocess.Popen(["cansend", "can0", str_trame], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
