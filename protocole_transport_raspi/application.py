@@ -13,12 +13,15 @@ from utiles import id_raspi
 # envoyer(message, buffer_acks, ack_received_cond)
 
 def main(q, buffer_acks, ack_received_cond):
-    ind = 0
+    print("envoi d'un message à 3")
+    envoyer(Message(3, 0,
+                    ['FF', 'EE', 'AA', 'AA', 'CC', 'BB', '01', '01', '01', '01', '01', 'CC', '01', '01', '01', '01',
+                     '01', '01', '01']), buffer_acks, ack_received_cond)
+
     while True:
         if not q.empty():
             print("message reçu : ")
             print(q.get().data)
             q.task_done()  # ne pas oublier après avoir récupéré un message!
 
-        ind = (ind + 1) % utiles.nb_disp
         # envoyer(Message(ind, id_raspi, "hola"), buffer_acks, ack_received_cond)
