@@ -58,7 +58,7 @@ def envoyer(message, buffer_acks, ack_received_cond):
         to_send = to_send[size_payload:]
         # remplir la trame de 0 si elle fait pas 8 octets
         if len(trame.data) < size_payload:
-            trame.data = trame.data + ''.join(['00' for _ in range(size_payload - len(trame.data))])
+            trame.data = trame.data + ['00' for _ in range(size_payload - len(trame.data))]
         # send trame 
         str_trame = trame.to_string()
         # TODO : uncomment to test
