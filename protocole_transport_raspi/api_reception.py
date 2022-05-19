@@ -133,10 +133,10 @@ def process_mess(trame, q, buffer_acks, ack_received_cond):
         q.put(message)
 
 
-def reception(q, buffer_acks):
+def reception(q, buffer_acks, ack_received_cond):
     reception_bash = subprocess.Popen(["candump", "any"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE)
     while True:
         output = reception_bash.stdout.readline()
         if output:
-            process_mess(output.strip().decode(), q, buffer_acks)  # output.strip().decode() est un string
+            process_mess(output.strip().decode(), q, buffer_acks, ack_received_cond)  # output.strip().decode() est un string

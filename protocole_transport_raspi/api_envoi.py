@@ -1,6 +1,6 @@
 import subprocess
 
-from utiles import Message, Trame, size_payload, nb_mess, nb_disp, id_raspi
+from utiles import Message, Trame, size_payload, nb_disp, id_raspi
 from utiles import nb_trames as trames_max
 from math import ceil
 
