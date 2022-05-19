@@ -11,3 +11,4 @@ def main(q, buffer_acks):  # ack_received et lock_buffer_acks doivent être pass
     while True:
         if not q.empty():
             print(q.get().data)  # get bloquant tant que la queue est vide!
+            q.task_done()

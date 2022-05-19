@@ -4,7 +4,8 @@ from utiles import buffer_reception
 from utiles import id_raspi
 from time import sleep
 
-# pour tester 
+
+# pour tester
 ###############################################################################################################
 
 def print_ligne_buff(id_or, id_mes):
@@ -26,9 +27,9 @@ def test_variables(trame):
 def test_reception(q, buffer_acks, ack_received_cond):
     print("--------------------------------test de la réception------------------------------------")
 
-    # 0000 0001 001 0000 0
-    print("appel de process mess avec en tête 0 1 1 0 0")
-    process_mess("can0 001 [8] 01 20 01 01 01 01 01 01", q, buffer_acks, ack_received_cond)
+    # 0100 0001 001 0000 0
+    print("appel de process mess avec en tête 4 1 1 0 0")
+    process_mess("can0 001 [8] 41 20 01 01 01 01 01 01", q, buffer_acks, ack_received_cond)
     print("\n")
 
     # 0000 0001 001 0010 0
@@ -83,20 +84,18 @@ def test_reception(q, buffer_acks, ack_received_cond):
 
 
 # TODO : processer les ack avec condition
-def process_mess(trame, q, buffer_acks, ack_received_cond ):
+def process_mess(trame, q, buffer_acks, ack_received_cond):
     print("process Trame...")
 
     trame = trame.split(" ")
     trame = Trame(trame[3:])  # trame [3:] pour virer l'en tête du candump
-
-    # test_variables(trame)
 
     # si la trame est pas pour moi return
     if trame.id_dest != id_raspi:
         print("ce message n'est pas pour moi")
         return
 
-    # si le message est un ack, on le passe à l'api d'envoi
+    # si le message est un ack, on le processe comme tel
     if trame.ack == 1:
         print("ack reçu en réception")
         print("process ack...")
@@ -109,10 +108,8 @@ def process_mess(trame, q, buffer_acks, ack_received_cond ):
             ack_received_cond.notify_all()
             ack_received_cond.release()
 
-
         print("ligne buff : ", buffer_acks[trame.id_or, trame.id_mes])
-
-    return
+        return
 
     # si le message est pour moi, traiter et mettre dans buffer
     ligne_buff = buffer_reception[(trame.id_or, trame.id_mes)]
@@ -129,22 +126,23 @@ def process_mess(trame, q, buffer_acks, ack_received_cond ):
     # envoyer ack de la trame
     trame_ack = Trame((trame.id_or, trame.id_mes, trame.seq), ack=1)
     str_trame_ack = trame_ack.to_string()
+    # TODO : uncomment to test
     # subprocess.Popen(["cansend", "can0", str_trame], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
     #                stderr=subprocess.PIPE)
     print("ack envoyé")
     print(str_trame_ack)
 
-
-    # message reçu en entier : 
+    # message reçu en entier :
     # dernière trame reçue (seq == 0) et toutes les trames sont là 
-    if (ligne_buff[-1].seq == 0) and (len(ligne_buff) == ligne_buff[0].seq + 1):
+    #if (ligne_buff[-1].seq == 0) and (len(ligne_buff) == ligne_buff[0].seq + 1):
+    if trame.seq == 0 :
+        print("trame.seq == 0 ")
         data = []  # data du message
         for trame in buffer_reception[(trame.id_or, trame.id_mes)]:
             data.extend(trame.data)
         message = Message(trame.id_dest, trame.id_or, data)
-        q.put(message)
-        q.task_done()
         print("message placé dans la file d'attente pour l'appli")
+        q.put(message)
 
     print("Trame processée!")
 
