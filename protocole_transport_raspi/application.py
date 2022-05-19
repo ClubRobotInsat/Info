@@ -15,7 +15,7 @@ from utiles import id_raspi
 def main(q, buffer_acks, ack_received_cond):
     print("envoi d'un message à 3")
     envoyer(Message(3, 0,
-                    ['FF', 'EE', 'AA', 'AA', 'CC', 'BB', '01', '01', '01', '01', '01', 'CC', '01', '01', '01', '01',
+                    ['FF', 'EE', 'AA', 'AA', 'CC', 'BB', '01', '01', '01', '01', '01', '01', '01', '01', '01',
                      '01', '01', '01']), buffer_acks, ack_received_cond)
 
     while True:
