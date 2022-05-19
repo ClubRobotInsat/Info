@@ -10,7 +10,7 @@ if __name__ == '__main__':  # ne s'exécute que si le fichier est lancé directe
     q = Queue(0)  # 0 pour queue infinie
     ack_received_cond = Condition()
 
-    thread_app = Thread(target=app, args=(q, buffer_acks,))
+    thread_app = Thread(target=app, args=(q, buffer_acks, ack_received_cond))
     thread_reception = Thread(target=reception, args=(q, buffer_acks, ack_received_cond))
 
     thread_app.setDaemon(True)
