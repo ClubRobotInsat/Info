@@ -95,6 +95,7 @@ def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
     # si le message est un ack, on le processe comme tel
     if trame.ack == 1:
         print("réception d'un ack, traitement...")
+        print("id_or : ", trame.id_or, "id_mes : ", trame.id_mes)
         buffer_lock.acquire()
         print("buffer_acks reception : ",buffer_acks[trame.id_or, trame.id_mes] )
         if buffer_acks[trame.id_or, trame.id_mes] != -1: # ce ack nous concerne
