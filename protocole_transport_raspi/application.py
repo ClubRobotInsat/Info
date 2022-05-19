@@ -19,21 +19,12 @@ def main(q, buffer_acks, ack_received_cond, buffer_lock):
                     ['FF', 'EE', 'AA', 'AA', 'CC', 'BB', '01', '01', '01', '01', '01', '01', '01', '01', '01',
                      '01', '01', '01']), buffer_acks, ack_received_cond, buffer_lock)
 
-    # je m'envoie mes propres acks, oui c'est moche
+    # m'envoyer mes propres acks a échoué, mais bon, visiblement le partage du buffer se fait bien
 
-    subprocess.Popen(["cansend", "can0", "000#03 03 00 00 00 00 00 00"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                     stderr=subprocess.PIPE)
-
-
-    subprocess.Popen(["cansend", "can0", "000#03 01 00 00 00 00 00 00"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                     stderr=subprocess.PIPE)
-
-
-    subprocess.Popen(["cansend", "can0", "000#03 05 00 00 00 00 00 00"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                     stderr=subprocess.PIPE)
     buffer_lock.acquire()
     print(" depuis l'app : ", buffer_acks[3,0])
     buffer_lock.release()
+
     while True:
         if not q.empty():
             print("message reçu : ")

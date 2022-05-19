@@ -97,7 +97,7 @@ def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
         print("réception d'un ack, traitement...")
         print("id_or : ", trame.id_or, "id_mes : ", trame.id_mes)
         buffer_lock.acquire()
-        print("buffer_acks reception : ",buffer_acks[trame.id_or, trame.id_mes] )
+        print("buffer_acks reception : ",buffer_acks[3,0] )
         if buffer_acks[trame.id_or, trame.id_mes] != -1: # ce ack nous concerne
             buffer_acks[trame.id_or, trame.id_mes] -= 1
         # on a reçu tous les acks, on notifie l'envoi
