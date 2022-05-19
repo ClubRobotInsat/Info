@@ -5,10 +5,9 @@ from utiles import Message, Trame
 from utiles import nb_trames as trames_max
 from utiles import size_payload
 from math import ceil
-from api_reception import process_mess
 
 # timeout pour la réception des acks
-timeout = 30  # TODO : valeur cohérente
+timeout = 0.050
 
 
 def test_envoi(buffer_acks, ack_received_cond):
@@ -45,7 +44,6 @@ def envoyer(message, buffer_acks, ack_received_cond):
     to_send = message.data
     seq = nb_trames - 1
     buffer_acks[message.id_dest, message.id_mes] = nb_trames
-    # print("buffer acks : ", buffer_acks[message.id_dest, message.id_mes])
     while to_send:
         trame = Trame((message.id_dest, message.id_mes, seq))
         trame.data = to_send[:size_payload]
@@ -56,10 +54,8 @@ def envoyer(message, buffer_acks, ack_received_cond):
         # send trame 
         str_trame = trame.to_string()
         # TODO : uncomment to test
-        # subprocess.Popen(["cansend", "can0", str_trame], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-        #                stderr=subprocess.PIPE)
-        # print(str_trame)
-     #   print("seq : ", seq)
+        subprocess.Popen(["cansend", "can0", str_trame], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
         seq -= 1
 
     # wait avec un timeout
@@ -68,5 +64,3 @@ def envoyer(message, buffer_acks, ack_received_cond):
         print("message envoyé!")
     else:
         print("échec de l'envoi du message, timeout expiré")
-
-

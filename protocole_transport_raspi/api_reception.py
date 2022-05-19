@@ -83,10 +83,7 @@ def test_reception(q, buffer_acks, ack_received_cond):
 ###############################################################################################################
 
 
-# TODO : processer les ack avec condition
 def process_mess(trame, q, buffer_acks, ack_received_cond):
-    print("process Trame...")
-
     trame = trame.split(" ")
     trame = Trame(trame[3:])  # trame [3:] pour virer l'en tête du candump
 
@@ -97,18 +94,12 @@ def process_mess(trame, q, buffer_acks, ack_received_cond):
 
     # si le message est un ack, on le processe comme tel
     if trame.ack == 1:
-        print("ack reçu en réception")
-        print("process ack...")
-        print("buffer acks : ", buffer_acks[trame.id_or, trame.id_mes])
         buffer_acks[trame.id_or, trame.id_mes] -= 1
-        # on a reçu tous les acks
+        # on a reçu tous les acks, on notifie l'envoi
         if buffer_acks[trame.id_or, trame.id_mes] == 0:
-            print("tous les acks reçus")
             ack_received_cond.acquire()
             ack_received_cond.notify_all()
             ack_received_cond.release()
-
-        print("ligne buff : ", buffer_acks[trame.id_or, trame.id_mes])
         return
 
     # si le message est pour moi, traiter et mettre dans buffer
@@ -127,24 +118,17 @@ def process_mess(trame, q, buffer_acks, ack_received_cond):
     trame_ack = Trame((trame.id_or, trame.id_mes, trame.seq), ack=1)
     str_trame_ack = trame_ack.to_string()
     # TODO : uncomment to test
-    # subprocess.Popen(["cansend", "can0", str_trame], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-    #                stderr=subprocess.PIPE)
-    print("ack envoyé")
-    print(str_trame_ack)
+    subprocess.Popen(["cansend", "can0", str_trame_ack], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                     stderr=subprocess.PIPE)
 
     # message reçu en entier :
     # dernière trame reçue (seq == 0) et toutes les trames sont là 
-    #if (ligne_buff[-1].seq == 0) and (len(ligne_buff) == ligne_buff[0].seq + 1):
-    if trame.seq == 0 :
-        print("trame.seq == 0 ")
+    if (ligne_buff[-1].seq == 0) and (len(ligne_buff) == ligne_buff[0].seq + 1):
         data = []  # data du message
         for trame in buffer_reception[(trame.id_or, trame.id_mes)]:
             data.extend(trame.data)
         message = Message(trame.id_dest, trame.id_or, data)
-        print("message placé dans la file d'attente pour l'appli")
         q.put(message)
-
-    print("Trame processée!")
 
 
 def reception(q, buffer_acks):
