@@ -52,6 +52,8 @@ def envoyer(message, buffer_acks, ack_received_cond):
     to_send = message.data
     seq = nb_trames - 1
     buffer_acks[message.id_dest, message.id_mes] = nb_trames
+    print("id dest : ", message.id_dest, "id_mes : ", message.id_mes)
+    print("buffer_acks : ", buffer_acks[message.id_dest, message.id_mes])
     while to_send:
         trame = Trame((message.id_dest, message.id_mes, seq))
         trame.data = to_send[:size_payload]
