@@ -139,5 +139,5 @@ def reception(q, buffer_acks, ack_received_cond):
     while True:
         output = reception_bash.stdout.readline()
         if output:
-            print(output.strip().decode())
+            # print(output.strip().decode())
             process_mess(output.strip().decode(), q, buffer_acks, ack_received_cond)  # output.strip().decode() est un string
