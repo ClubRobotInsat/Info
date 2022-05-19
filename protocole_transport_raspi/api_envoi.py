@@ -4,29 +4,28 @@ import utiles
 from utiles import Message, Trame
 from utiles import nb_trames as trames_max
 from utiles import size_payload
-from utiles import buffer_acks
 from math import ceil
 from multiprocessing import Condition, Lock
 
 # timeout pour la réception des acks
-timeout = 3
+timeout = 30 # TODO : valeur cohérente
 
 
-def test_envoi(ack_received, lock_buffer_acks):
+def test_envoi(ack_received, lock_buffer_acks, buffer_acks):
     envoyer(Message(3, 0,
                         ['FF', 'EE', 'AA', 'AA', 'CC', 'BB', '01', '01', '01', '01', '01', 'CC', '01', '01', '01', '01',
-                         '01', '01', '01']), ack_received, lock_buffer_acks)
+                         '01', '01', '01']), ack_received, lock_buffer_acks, buffer_acks)
 
     # TODO : more tests
-    envoyer(Message(9, 0, ['00']), ack_received, lock_buffer_acks)
-    envoyer(Message(88, 0, ['']), ack_received, lock_buffer_acks)
-    envoyer(Message(9, 9, ['']), ack_received, lock_buffer_acks)
-    envoyer(Message(1, 0, "ksjhflsdkfghsldfvb"), ack_received, lock_buffer_acks)
-    print("envoi d'un message à la raspi")
-    envoyer(Message(0,0, ['AA']), ack_received, lock_buffer_acks)
+    #envoyer(Message(9, 0, ['00']), ack_received, lock_buffer_acks)
+    #envoyer(Message(88, 0, ['']), ack_received, lock_buffer_acks)
+    #envoyer(Message(9, 9, ['']), ack_received, lock_buffer_acks)
+    #envoyer(Message(1, 0, "ksjhflsdkfghsldfvb"), ack_received, lock_buffer_acks)
+    #print("envoi d'un message à la raspi")
+    #envoyer(Message(0,0, ['AA']), ack_received, lock_buffer_acks)
 
 
-def envoyer(message, ack_received, lock_buffer_envoi):
+def envoyer(message, ack_received, lock_buffer_envoi, buffer_acks):
     if message.id_dest < 0 or message.id_dest > utiles.nb_disp:
         print("ce destinataire n'existe pas")
         return
@@ -44,7 +43,7 @@ def envoyer(message, ack_received, lock_buffer_envoi):
 
     to_send = message.data
     seq = nb_trames - 1
-    lock_buffer_envoi.acquire()
+    lock_buffer_envoi.acquire(True)
     buffer_acks[message.id_dest, message.id_mes] = seq
     print("buffer acks : ", buffer_acks[message.id_dest, message.id_mes])
     lock_buffer_envoi.release()
@@ -60,20 +59,23 @@ def envoyer(message, ack_received, lock_buffer_envoi):
         # subprocess.Popen(["cansend", "can0", str_trame], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
         #                stderr=subprocess.PIPE)
         print(str_trame)
+        print("seq : ", seq)
         seq -= 1
+    
     # wait avec un timeout
-    ack_received.acquire()
-    if ack_received.wait(timeout):
-        print("message envoyé!")
-        print("#######################message envoyé dans sa totalité######################")
-    else:
-        print("échec de l'envoi du message, timeout expiré")
+    #ack_received.acquire()
+    #if ack_received.wait(timeout):
+     #   print("message envoyé!")
+      #  print("#######################message envoyé dans sa totalité######################")
+    #else:
+     #   print("échec de l'envoi du message, timeout expiré")
 
 
-def process_ack(trame, ack_received, lock_buffer_envoi):
+
+def process_ack(trame, ack_received, lock_buffer_envoi, buffer_acks):
     print("process ack...")
-    lock_buffer_envoi.acquire()
-    print("buffer acks : ", buffer_acks[trame.id_dest, trame.id_mes])
+    lock_buffer_envoi.acquire(True)
+    print("buffer acks : ", buffer_acks[trame.id_or, trame.id_mes])
     buffer_acks[trame.id_or, trame.id_mes] -= 1
     # on a reçu tous les acks
     if buffer_acks[trame.id_or, trame.id_mes] == 0:
