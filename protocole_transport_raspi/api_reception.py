@@ -83,7 +83,7 @@ def test_reception(q, buffer_acks, ack_received_cond):
 ###############################################################################################################
 
 
-def process_mess(trame, q, buffer_acks, ack_received_cond):
+def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
     trame = trame.split(" ")
     trame = Trame(trame[7:])  # trame [7:] pour virer l'en tête du candump
 
@@ -95,6 +95,7 @@ def process_mess(trame, q, buffer_acks, ack_received_cond):
     # si le message est un ack, on le processe comme tel
     if trame.ack == 1:
         print("réception d'un ack, traitement...")
+        buffer_lock.acquire()
         print("buffer_acks reception : ",buffer_acks[trame.id_or, trame.id_mes] )
         if buffer_acks[trame.id_or, trame.id_mes] != -1: # ce ack nous concerne
             buffer_acks[trame.id_or, trame.id_mes] -= 1
@@ -105,6 +106,7 @@ def process_mess(trame, q, buffer_acks, ack_received_cond):
             ack_received_cond.release()
             # reset la ligne du buffer à -1 pour qu'on soit sache qu'il n'y a plus de message en attente de confirmation
             buffer_acks[trame.id_or, trame.id_mes] = -1
+        buffer_lock.release()
         return
 
     # si le message est pour moi, traiter et mettre dans buffer
@@ -136,11 +138,11 @@ def process_mess(trame, q, buffer_acks, ack_received_cond):
         q.put(message)
 
 
-def reception(q, buffer_acks, ack_received_cond):
+def reception(q, buffer_acks, ack_received_cond, buffer_lock):
     reception_bash = subprocess.Popen(["candump", "any"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE)
     while True:
         output = reception_bash.stdout.readline()
         if output:
             # print(output.strip().decode())
-            process_mess(output.strip().decode(), q, buffer_acks, ack_received_cond)  # output.strip().decode() est un string
+            process_mess(output.strip().decode(), q, buffer_acks, ack_received_cond, buffer_lock)  # output.strip().decode() est un string

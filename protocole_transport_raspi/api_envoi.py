@@ -29,7 +29,7 @@ def test_envoi(buffer_acks, ack_received_cond):
 ###############################################################################################################
 
 # TODO : qu'il ne soit pas possible d'envoyer si on a dépassé nb_mess
-def envoyer(message, buffer_acks, ack_received_cond):
+def envoyer(message, buffer_acks, ack_received_cond, buffer_lock):
     if message.id_dest < 0 or message.id_dest > nb_disp:
         print("ce destinataire n'existe pas")
         return
@@ -38,9 +38,11 @@ def envoyer(message, buffer_acks, ack_received_cond):
         print("vous ne pouvez pas envoyer un message avec une autre id que celle de la raspi")
         return
 
+    buffer_lock.acquire()
     if buffer_acks[message.id_dest, message.id_mes] != -1:
         print("vous ne pouvez pas envoyer de message pour le moment, trop de messages en attente de confirmation")
         return
+    buffer_lock.release()
 
     size_data = len(message.data)
     nb_trames = ceil(size_data / size_payload)
@@ -51,9 +53,12 @@ def envoyer(message, buffer_acks, ack_received_cond):
 
     to_send = message.data
     seq = nb_trames - 1
+    buffer_lock.acquire()
     buffer_acks[message.id_dest, message.id_mes] = nb_trames
     print("id dest : ", message.id_dest, "id_mes : ", message.id_mes)
     print("buffer_acks : ", buffer_acks[message.id_dest, message.id_mes])
+    buffer_lock.release()
+
     while to_send:
         trame = Trame((message.id_dest, message.id_mes, seq))
         trame.data = to_send[:size_payload]

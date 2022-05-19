@@ -12,11 +12,11 @@ from utiles import id_raspi
 # buffer_acks et ack_received_cond doivent être passés à envoyer :
 # envoyer(message, buffer_acks, ack_received_cond)
 
-def main(q, buffer_acks, ack_received_cond):
+def main(q, buffer_acks, ack_received_cond, buffer_lock):
     print("envoi d'un message à 3")
     envoyer(Message(3, 0,
                     ['FF', 'EE', 'AA', 'AA', 'CC', 'BB', '01', '01', '01', '01', '01', '01', '01', '01', '01',
-                     '01', '01', '01']), buffer_acks, ack_received_cond)
+                     '01', '01', '01']), buffer_acks, ack_received_cond, buffer_lock)
 
     while True:
         if not q.empty():
@@ -24,4 +24,3 @@ def main(q, buffer_acks, ack_received_cond):
             print(q.get().data)
             q.task_done()  # ne pas oublier après avoir récupéré un message!
 
-        # envoyer(Message(ind, id_raspi, "hola"), buffer_acks, ack_received_cond)
