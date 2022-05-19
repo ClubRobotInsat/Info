@@ -31,7 +31,9 @@ def main(q, buffer_acks, ack_received_cond, buffer_lock):
 
     subprocess.Popen(["cansend", "can0", "000#03 05 00 00 00 00 00 00"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                      stderr=subprocess.PIPE)
-
+    buffer_lock.acquire()
+    print(" depuis l'app : ", buffer_acks[3,0])
+    buffer_lock.release()
     while True:
         if not q.empty():
             print("message reçu : ")
