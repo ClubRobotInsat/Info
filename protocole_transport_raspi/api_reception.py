@@ -100,6 +100,8 @@ def process_mess(trame, q, buffer_acks, ack_received_cond):
             ack_received_cond.acquire()
             ack_received_cond.notify_all()
             ack_received_cond.release()
+            # reset la ligne du buffer à -1 pour qu'on soit sache qu'il n'y a plus de message en attente de confirmation
+            buffer_acks[trame.id_or, trame.id_mes] = -1
         return
 
     # si le message est pour moi, traiter et mettre dans buffer
