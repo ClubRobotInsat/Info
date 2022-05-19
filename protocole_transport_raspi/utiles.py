@@ -12,7 +12,6 @@ class Trame(object):
 
         else:  # pour créer une trame depuis la réception à partir du message reçu par bash
             # passer des strings à des int (et il prend en compte que c'est de l'hexa avec le 16)
-            # print(arg)
             self.id_dest = int(arg[0], 16) >> 4
             self.id_or = int(arg[0], 16) & 15
             self.id_mes = int(arg[1], 16) >> 5

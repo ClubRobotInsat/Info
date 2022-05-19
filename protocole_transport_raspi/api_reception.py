@@ -94,10 +94,7 @@ def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
 
     # si le message est un ack, on le processe comme tel
     if trame.ack == 1:
-        print("réception d'un ack, traitement...")
-        print("id_or : ", trame.id_or, "id_mes : ", trame.id_mes)
         buffer_lock.acquire()
-        print("buffer_acks reception : ",buffer_acks[3,0] )
         if buffer_acks[trame.id_or, trame.id_mes] != -1: # ce ack nous concerne
             buffer_acks[trame.id_or, trame.id_mes] -= 1
         # on a reçu tous les acks, on notifie l'envoi
@@ -145,5 +142,5 @@ def reception(q, buffer_acks, ack_received_cond, buffer_lock):
     while True:
         output = reception_bash.stdout.readline()
         if output:
-            print(output.strip().decode())
+            print("reçu au can : ", output.strip().decode())
             process_mess(output.strip().decode(), q, buffer_acks, ack_received_cond, buffer_lock)  # output.strip().decode() est un string

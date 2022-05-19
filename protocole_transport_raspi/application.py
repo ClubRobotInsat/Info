@@ -19,12 +19,6 @@ def main(q, buffer_acks, ack_received_cond, buffer_lock):
                     ['FF', 'EE', 'AA', 'AA', 'CC', 'BB', '01', '01', '01', '01', '01', '01', '01', '01', '01',
                      '01', '01', '01']), buffer_acks, ack_received_cond, buffer_lock)
 
-    # m'envoyer mes propres acks a échoué, mais bon, visiblement le partage du buffer se fait bien
-
-    buffer_lock.acquire()
-    print(" depuis l'app : ", buffer_acks[3,0])
-    buffer_lock.release()
-
     while True:
         if not q.empty():
             print("message reçu : ")

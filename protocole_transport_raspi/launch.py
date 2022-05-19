@@ -8,7 +8,7 @@ if __name__ == '__main__':  # ne s'exécute que si le fichier est lancé directe
 
     q = Queue(0)  # 0 pour queue infinie
     ack_received_cond = Condition()
-    buffer_lock = Lock()
+    buffer_lock = Lock() # ça a l'air de marcher sans, mais sait-on jamais 
 
     thread_app = Thread(target=app, args=(q, buffer_acks, ack_received_cond, buffer_lock))
     thread_reception = Thread(target=reception, args=(q, buffer_acks, ack_received_cond, buffer_lock))
