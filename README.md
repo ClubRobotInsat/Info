@@ -4,7 +4,7 @@ Code de haut niveau pour controler les actions et la stratégie du robot
 
 ## QR codes
 
-## [aruco-decoder](./aruco-decoder): Décodage des qr-code sur les faces trésors
+### [aruco-decoder](./aruco-decoder): Décodage des qr-code sur les faces trésors
 
 ## Transport 
 
@@ -16,4 +16,4 @@ Code de haut niveau pour controler les actions et la stratégie du robot
 - [utiles.py](./protocole_transport_raspi/utiles.py) : classes **Trame** et **Message**, diverses variables, dictionnaires **buffer_reception** et **buffer_acks** 
 - [format_du_bash.txt](./protocole_transport_raspi/format_du_bash.txt) : format de la réception et de l'envoi de la librairie can-utils utilisée par ce code 
 
-
+![diagramme](./protocole_transport_raspi/diagramme_explicatif.png)
