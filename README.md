@@ -2,10 +2,9 @@
 
 Code de haut niveau pour controler les actions et la stratégie du robot
 
-# Structure du projet
-
 ## QR codes
-- [aruco-decoder](./aruco-decoder): Décodage des qr-code sur les faces trésors
+
+## [aruco-decoder](./aruco-decoder): Décodage des qr-code sur les faces trésors
 
 ## Transport 
 
