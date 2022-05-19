@@ -64,4 +64,4 @@ buffer_reception = {key: [] for key in keys}
 
 # buffer où l'envoi met les acks reçus
 # chaque ligne du buffer contient le nb de trames du message, décrémenté à chaque réception de ack
-buffer_acks = {key: 0 for key in keys}
+#buffer_acks = {key: 0 for key in keys}
