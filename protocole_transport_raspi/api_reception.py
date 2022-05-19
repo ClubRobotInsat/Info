@@ -99,8 +99,7 @@ def process_mess(trame, q, ack_received, lock_buffer_acks, buffer_acks):
 
     # si le message est un ack, on le passe à l'api d'envoi
     if trame.ack == 1:
-        print("ack reçu, passage à process_ack")
-        process_ack(trame, ack_received, lock_buffer_acks, buffer_acks)
+        print("ack reçu en réception")
         return
 
     # si le message est pour moi, traiter et mettre dans buffer
