@@ -21,4 +21,4 @@ def main(q, buffer_acks, ack_received_cond):
             q.task_done()  # ne pas oublier après avoir récupéré un message!
 
         ind = (ind + 1) % utiles.nb_disp
-        envoyer(Message(ind, id_raspi, "hola"), buffer_acks, ack_received_cond)
+        envoyer(Message(id_raspi, id_raspi, "hola"), buffer_acks, ack_received_cond)

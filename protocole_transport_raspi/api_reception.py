@@ -85,7 +85,7 @@ def test_reception(q, buffer_acks, ack_received_cond):
 
 def process_mess(trame, q, buffer_acks, ack_received_cond):
     trame = trame.split(" ")
-    trame = Trame(trame[3:])  # trame [3:] pour virer l'en tête du candump
+    trame = Trame(trame[7:])  # trame [7:] pour virer l'en tête du candump
 
     # si la trame est pas pour moi return
     if trame.id_dest != id_raspi:
