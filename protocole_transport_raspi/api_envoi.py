@@ -10,6 +10,9 @@ from math import ceil
 timeout = 0.050
 
 
+# pour tester
+###############################################################################################################
+
 def test_envoi(buffer_acks, ack_received_cond):
     print("envoi d'un message à 3, simulation de la réception des acks")
     envoyer(Message(3, 0,
@@ -23,6 +26,9 @@ def test_envoi(buffer_acks, ack_received_cond):
     # envoyer(Message(1, 0, "ksjhflsdkfghsldfvb"), ack_received, lock_buffer_acks)
     # print("envoi d'un message à la raspi")
     # envoyer(Message(0,0, ['AA']), ack_received, lock_buffer_acks)
+
+
+###############################################################################################################
 
 
 def envoyer(message, buffer_acks, ack_received_cond):

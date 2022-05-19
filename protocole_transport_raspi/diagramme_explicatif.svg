@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="407px" preserveAspectRatio="none" style="width:529px;height:407px;background:#FFFFFF;" version="1.1" viewBox="0 0 529 407" width="529px" zoomAndPan="magnify"><defs/><g><!--MD5=[38cb25d2e9f99ac8aa06ea5408117b7a]
+cluster thread_reception--><g id="cluster_thread_reception"><rect height="210.5" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="178" x="152.5159" y="83"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="138" x="172.5159" y="97.9951">thread_reception</text></g><!--MD5=[959b3c89d4f31a8b7e9ab68bc5ead463]
+cluster thread_application--><g id="cluster_thread_application"><rect height="190.5" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;fill:none;" width="169" x="354.5159" y="211"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="153" x="362.5159" y="225.9951">thread_application</text></g><g id="elem_reception"><ellipse cx="245.4255" cy="132.8819" fill="#F1F1F1" rx="62.4096" ry="14.8819" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71" x="206.9255" y="136.6295">reception</text></g><g id="elem_process_mess"><ellipse cx="241.7027" cy="260.4374" fill="#F1F1F1" rx="72.6868" ry="16.9374" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="100" x="188.7027" y="264.1849">process_mess</text></g><g id="elem_envoyer"><ellipse cx="424.3631" cy="371.2215" fill="#F1F1F1" rx="53.3472" ry="14.7215" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="58" x="392.3631" y="374.969">envoyer</text></g><g id="elem_main"><ellipse cx="407.2881" cy="260.5369" fill="#F1F1F1" rx="36.2722" ry="14.5369" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="35" x="388.6616" y="263.7741">main</text></g><g id="elem_launch.py"><ellipse cx="325.5756" cy="20.782" fill="#F1F1F1" rx="61.5597" ry="14.782" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69" x="288.0756" y="24.5295">launch.py</text></g><g id="elem_queue"><ellipse cx="164.669" cy="371.1013" fill="#F1F1F1" rx="42.1531" ry="14.6013" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="43" x="140.169" y="374.8489">queue</text></g><!--MD5=[e260f7c7d40204dd487e469641e4065e]
+link launch.py to reception--><g id="link_launch.py_reception"><path d="M315.3839,35.932 C300.9579,55.768 274.4879,92.164 258.5969,114.015 " fill="none" id="launch.py-to-reception" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="255.5659,118.182,264.0942,113.2557,258.5066,114.1382,257.6241,108.5506,255.5659,118.182" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[e9d77adaf68bb6ec34e7f881bf03188c]
+link launch.py to main--><g id="link_launch.py_main"><path d="M330.3999,36.145 C344.5099,77.012 385.3289,195.239 401.1479,241.055 " fill="none" id="launch.py-to-main" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="402.8629,246.021,403.707,236.2084,401.2313,241.2947,396.1449,238.819,402.8629,246.021" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[24cb3b87ef03151d332ab7e39f7907b3]
+link reception to process_mess--><g id="link_reception_process_mess"><path d="M245.0579,148.396 C244.3559,170.396 243.0139,212.516 242.1979,238.102 " fill="none" id="reception-to-process_mess" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="242.0329,243.298,246.3163,234.4294,242.1915,238.3005,238.3204,234.1757,242.0329,243.298" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="46" x="245.5159" y="191.0669">appelle</text></g><!--MD5=[4ee088e58af814e04cccd22fdfa7a4bd]
+link process_mess to queue--><g id="link_process_mess_queue"><path d="M175.8589,267.739 C121.4466,274.427 50.2585,287.221 32.5163,309.5 C6,342.7965 71.8847,358.4896 119.8173,365.3157 " fill="none" id="process_mess-to-queue" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="124.9801,366.027,116.6103,360.8361,120.0269,365.3446,115.5184,368.7612,124.9801,366.027" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="164" x="33.5163" y="322.5669">quand mess complet, put</text></g><!--MD5=[da5e7a30fbb4c6776069846677c0395c]
+link main to queue--><g id="link_main_queue"><path d="M395.3409,274.435 C380.7919,289.145 355.0669,312.884 328.5159,326.5 C290.0439,346.2308 241.7739,357.6362 207.5899,363.7767 " fill="none" id="main-to-queue" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="202.6519,364.6449,212.2085,367.0262,207.5764,363.7792,210.8234,359.1471,202.6519,364.6449" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="21" x="355.5159" y="322.5669">get</text></g><!--MD5=[894b851141c72004129bcd3e3c12b574]
+link main to envoyer--><g id="link_main_envoyer"><path d="M409.6689,275.242 C412.6839,294.482 418.1729,329.5147 421.5659,351.1703 " fill="none" id="main-to-envoyer" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="422.3809,356.37,424.9393,346.8592,421.6068,351.4303,417.0358,348.0978,422.3809,356.37" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="46" x="418.5159" y="322.5669">appelle</text></g><!--MD5=[a6b3ae8c15c79e91343cdea7543d0f62]
+link process_mess to envoyer--><g id="link_process_mess_envoyer"><path d="M235.4029,277.463 C231.0309,291.846 227.6359,312.781 238.5159,326.5 C254.7039,346.9103 321.0739,358.6521 369.9359,364.6782 " fill="none" id="process_mess-to-envoyer" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="374.9059,365.279,366.4509,360.2279,369.942,364.679,365.4909,368.1701,374.9059,365.279" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="84" x="239.5159" y="322.5669">si ack, notifie</text></g><!--MD5=[dc8d778f7002e412077254c432ebce3e]
+@startuml
+rectangle thread_reception{
+ usecase "reception"
+ usecase "process_mess"
+}
+
+rectangle thread_application{
+ usecase "envoyer"
+ usecase "main" 
+}
+
+(launch.py) - -> (reception)
+(launch.py) - -> (main) 
+
+(reception) - -> (process_mess) : appelle
+
+(process_mess) - -> (queue) : quand mess complet, put 
+
+(main) - -> (queue) : get 
+(main) - -> (envoyer) : appelle 
+
+(process_mess) - -> (envoyer) : si ack, notifie
+@enduml
+
+PlantUML version 1.2022.6beta1(Unknown compile time)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
