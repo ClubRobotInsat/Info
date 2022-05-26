@@ -28,6 +28,8 @@ def test_envoi(buffer_acks, ack_received_cond):
 
 ###############################################################################################################
 
+
+# return true si acks reçus, false sinon
 def envoyer(message, buffer_acks, ack_received_cond, buffer_lock):
     if message.id_dest < 0 or message.id_dest > nb_disp:
         print("ce destinataire n'existe pas")
@@ -74,6 +76,6 @@ def envoyer(message, buffer_acks, ack_received_cond, buffer_lock):
     # wait avec un timeout
     ack_received_cond.acquire()
     if ack_received_cond.wait(timeout):
-        print("message envoyé!")
+        return True
     else:
-        print("échec de l'envoi du message, timeout expiré")
+        return False

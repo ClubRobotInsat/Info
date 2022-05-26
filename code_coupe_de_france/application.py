@@ -19,11 +19,19 @@ def main(q, buffer_acks, ack_received_cond, buffer_lock):
     thread_detection = Thread(target= lidar.detection, args=(laser, buffer_acks, ack_received_cond, buffer_lock))
     thread_detection.setDaemon(True)
     thread_detection.start()"""
-    print("envoi d'un message à 3")
-    envoyer(Message(3, id_raspi,
-                    ['FF', 'EE', 'AA', 'AA', 'CC', 'BB', '01', '01', '01', '01', '01', '01', '01', '01', '01',
-                     '01', '01', '01']), buffer_acks, ack_received_cond, buffer_lock)
-    print("reception d'un message")
+
+    message_court = Message(3,id_raspi,['FF'])
+    envoye = envoyer(message_court, buffer_acks, ack_received_cond, buffer_lock)
+    while not envoye:
+        envoye = envoyer(message_court, buffer_acks, ack_received_cond, buffer_lock)
+
+    message_long = Message(3, id_raspi, ['99' for _ in range(20)])
+    envoye = envoyer(message_long, buffer_acks, ack_received_cond, buffer_lock)
+    while not envoye:
+        envoye = envoyer(message_long, buffer_acks, ack_received_cond, buffer_lock)
+
+    # trollons Louis
+    envoyer(message_court, buffer_acks, ack_received_cond, buffer_lock)
 
 
     # thread_detection.join()
