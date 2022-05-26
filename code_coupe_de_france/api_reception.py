@@ -124,9 +124,9 @@ def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
 
     # pour éviter que si Louis envoie plusieurs fois la dernière trame,
     # on le compte comme un autre message
+    print("id mess attendue : ", id_mes_attendue[trame.id_or])
     if id_mes_attendue[trame.id_or] != trame.id_mes:
         return
-    id_mes_attendue[trame.id_or] = (id_mes_attendue[trame.id_or] + 1)%utiles.nb_mess
 
     # si le message est pour moi, traiter et mettre dans buffer
     ligne_buff = buffer_reception[(trame.id_or, trame.id_mes)]
@@ -151,6 +151,9 @@ def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
         message = Message(trame.id_dest, trame.id_or, data)
         q.put(message)
         buffer_reception[(trame.id_or, trame.id_mes)] = []
+        print("id mess attendue modifiée")
+        id_mes_attendue[trame.id_or] = (id_mes_attendue[trame.id_or] + 1)%utiles.nb_mess
+
 
 
 
