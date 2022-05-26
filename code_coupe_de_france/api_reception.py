@@ -112,7 +112,9 @@ def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
     # append dans le buffer dans l'ordre
     if not ligne_buff:
         ligne_buff.append(trame)
-    elif ligne_buff[-1].seq != trame.seq and ligne_buff[-1].seq < trame.seq: # TODO : première cond rajoutée pendant la coupe à l'arrache
+    elif ligne_buff[-1].seq == trame.seq:
+        print("t'as reçu le même message plusieurs fois")
+    elif ligne_buff[-1].seq < trame.seq: # TODO : première cond rajoutée pendant la coupe à l'arrache
         dernier = ligne_buff[-1]
         ligne_buff[-1] = trame
         ligne_buff.append(dernier)
@@ -126,7 +128,7 @@ def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
     # TODO : uncomment to test
     envoi_ack = subprocess.Popen(["cansend", "can0", str_trame_ack], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                      stderr=subprocess.PIPE)
-    print(envoi_ack.stderr.read())
+    # print(envoi_ack.stderr.read())
     # message reçu en entier :
     # dernière trame reçue (seq == 0) et toutes les trames sont là 
     if (ligne_buff[-1].seq == 0) and (len(ligne_buff) == ligne_buff[0].seq + 1):

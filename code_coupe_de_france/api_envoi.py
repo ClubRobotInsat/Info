@@ -5,7 +5,7 @@ from utiles import nb_trames as trames_max
 from math import ceil
 
 # timeout pour la réception des acks
-timeout = 4 # TODO : valeur cohérente
+timeout = 20 # TODO : valeur cohérente
 
 
 # pour tester
