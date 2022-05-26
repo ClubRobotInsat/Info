@@ -7,7 +7,7 @@ from utiles import id_raspi
 from time import sleep
 
 
-id_mes_attendue = [0 for _ in utiles.nb_disp] # pour éviter que si Louis envoie plusieurs fois la dernière trame,
+id_mes_attendue = [0 for _ in range(utiles.nb_disp)] # pour éviter que si Louis envoie plusieurs fois la dernière trame,
 # on le compte comme un autre message
 
 # pour tester
