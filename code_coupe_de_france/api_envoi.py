@@ -28,7 +28,6 @@ def test_envoi(buffer_acks, ack_received_cond):
 
 ###############################################################################################################
 
-# TODO : qu'il ne soit pas possible d'envoyer si on a dépassé nb_mess
 def envoyer(message, buffer_acks, ack_received_cond, buffer_lock):
     if message.id_dest < 0 or message.id_dest > nb_disp:
         print("ce destinataire n'existe pas")
