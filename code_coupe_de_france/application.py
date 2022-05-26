@@ -15,22 +15,18 @@ from threading import Thread
 
 
 def main(q, buffer_acks, ack_received_cond, buffer_lock):
-    laser = lidar.initialisation()
+    """laser = lidar.initialisation()
     thread_detection = Thread(target= lidar.detection, args=(laser, buffer_acks, ack_received_cond, buffer_lock))
     thread_detection.setDaemon(True)
-    thread_detection.start()
+    thread_detection.start()"""
     print("envoi d'un message à 3")
     envoyer(Message(3, id_raspi,
                     ['FF', 'EE', 'AA', 'AA', 'CC', 'BB', '01', '01', '01', '01', '01', '01', '01', '01', '01',
                      '01', '01', '01']), buffer_acks, ack_received_cond, buffer_lock)
     print("reception d'un message")
 
-    if not q.empty():
-        print("message reçu : ")
-        print(q.get().data)
-        q.task_done()  # ne pas oublier après avoir récupéré un message!
 
-    thread_detection.join()
+    # thread_detection.join()
 
     while True:
         if not q.empty():

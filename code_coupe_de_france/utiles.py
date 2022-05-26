@@ -22,7 +22,9 @@ class Trame(object):
 
     def to_string(self):
         # bytes d'en tête
-        trame_bytes = [hex(self.id_dest << 4 | self.id_or), hex(self.id_mes << 5 | self.seq << 1 | self.ack)]
+        first_byte = self.id_dest << 4 | self.id_or
+        second_byte = self.id_mes << 5 | self.seq << 1 | self.ack
+        trame_bytes = [f"{first_byte:02x}", f"{second_byte:02x}"]
         # bytes de data
         for d in self.data:
             trame_bytes.append(d)
