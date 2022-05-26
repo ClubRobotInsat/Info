@@ -67,3 +67,7 @@ buffer_reception = {key: [] for key in keys}
 # buffer où l'envoi met les acks reçus
 # chaque ligne du buffer contient le nb de trames du message, décrémenté à chaque réception de ack
 buffer_acks = {key: -1 for key in keys}
+
+
+trame = Trame((3,0,2),ack=1)
+print(trame.to_string())

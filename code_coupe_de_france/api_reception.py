@@ -122,6 +122,7 @@ def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
     # envoyer ack de la trame
     trame_ack = Trame((trame.id_or, trame.id_mes, trame.seq), ack=1)
     str_trame_ack = trame_ack.to_string()
+    print("ack envoyé : ", str_trame_ack)
     # TODO : uncomment to test
     subprocess.Popen(["cansend", "can0", str_trame_ack], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                      stderr=subprocess.PIPE)
