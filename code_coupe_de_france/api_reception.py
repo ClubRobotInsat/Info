@@ -112,7 +112,7 @@ def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
     # append dans le buffer dans l'ordre
     if not ligne_buff:
         ligne_buff.append(trame)
-    elif ligne_buff[-1].seq < trame.seq:
+    elif ligne_buff[-1].seq != trame.seq and ligne_buff[-1].seq < trame.seq: # TODO : première cond rajoutée pendant la coupe à l'arrache
         dernier = ligne_buff[-1]
         ligne_buff[-1] = trame
         ligne_buff.append(dernier)
