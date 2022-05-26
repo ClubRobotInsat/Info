@@ -124,9 +124,9 @@ def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
     str_trame_ack = trame_ack.to_string()
     print("ack envoyé : ", str_trame_ack)
     # TODO : uncomment to test
-    subprocess.Popen(["cansend", "can0", str_trame_ack], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+    envoi_ack = subprocess.Popen(["cansend", "can0", str_trame_ack], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                      stderr=subprocess.PIPE)
-
+    print(envoi_ack.stderr.read())
     # message reçu en entier :
     # dernière trame reçue (seq == 0) et toutes les trames sont là 
     if (ligne_buff[-1].seq == 0) and (len(ligne_buff) == ligne_buff[0].seq + 1):
