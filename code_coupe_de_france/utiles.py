@@ -31,7 +31,7 @@ class Trame(object):
         trame_str = "000#"  # un truc du cansend, je sais pas vraiment à quoi ça sert
         for byte in trame_bytes:
             trame_str += str(byte)
-            trame_str += " "
+            trame_str += "."
         trame_str = trame_str.replace("0x", "")
         return trame_str
 

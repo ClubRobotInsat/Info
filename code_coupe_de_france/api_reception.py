@@ -135,6 +135,8 @@ def process_mess(trame, q, buffer_acks, ack_received_cond, buffer_lock):
             data.extend(trame.data)
         message = Message(trame.id_dest, trame.id_or, data)
         q.put(message)
+        buffer_reception[(trame.id_or, trame.id_mes)] = []
+
 
 
 def reception(q, buffer_acks, ack_received_cond, buffer_lock):
