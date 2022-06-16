@@ -33,16 +33,16 @@ def test_envoi(buffer_acks, ack_received_cond):
 def envoyer(message, buffer_acks, ack_received_cond, buffer_lock):
     if message.id_dest < 0 or message.id_dest > nb_disp:
         print("ce destinataire n'existe pas")
-        return
+        return False
 
     if message.id_or is not id_raspi:
         print("vous ne pouvez pas envoyer un message avec une autre id que celle de la raspi")
-        return
+        return False
 
     buffer_lock.acquire()
     if buffer_acks[message.id_dest, message.id_mes] != -1:
         print("vous ne pouvez pas envoyer de message pour le moment, trop de messages en attente de confirmation")
-        return
+        return False
     buffer_lock.release()
 
     size_data = len(message.data)
@@ -50,7 +50,7 @@ def envoyer(message, buffer_acks, ack_received_cond, buffer_lock):
 
     if nb_trames > trames_max:
         print("ce message est trop long pour être envoyé")
-        return
+        return False
 
     to_send = message.data
     seq = nb_trames - 1
@@ -76,6 +76,8 @@ def envoyer(message, buffer_acks, ack_received_cond, buffer_lock):
     # wait avec un timeout
     ack_received_cond.acquire()
     if ack_received_cond.wait(timeout):
+        print("message envoyé! ")
         return True
     else:
+        print("timeout, message pas envoyé")
         return False

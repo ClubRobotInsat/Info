@@ -15,10 +15,10 @@ from threading import Thread
 
 
 def main(q, buffer_acks, ack_received_cond, buffer_lock):
-    """laser = lidar.initialisation()
-    thread_detection = Thread(target= lidar.detection, args=(laser, buffer_acks, ack_received_cond, buffer_lock))
-    thread_detection.setDaemon(True)
-    thread_detection.start()"""
+    #laser = lidar.initialisation()
+    #thread_detection = Thread(target= lidar.detection, args=(laser, buffer_acks, ack_received_cond, buffer_lock))
+    #thread_detection.setDaemon(True)
+    #thread_detection.start()
 
     message_court = Message(3,id_raspi,['FF'])
     envoye = envoyer(message_court, buffer_acks, ack_received_cond, buffer_lock)
@@ -30,7 +30,7 @@ def main(q, buffer_acks, ack_received_cond, buffer_lock):
     while not envoye:
         envoye = envoyer(message_long, buffer_acks, ack_received_cond, buffer_lock)
 
-    # trollons Louis
+    # on renvoie le même message pour voir si l'autre côté réagit bien
     envoyer(message_court, buffer_acks, ack_received_cond, buffer_lock)
 
 
@@ -41,5 +41,3 @@ def main(q, buffer_acks, ack_received_cond, buffer_lock):
             print("message reçu : ")
             print(q.get().data)
             q.task_done()  # ne pas oublier après avoir récupéré un message!
-
-
