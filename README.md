@@ -2,6 +2,10 @@
 
 Code de haut niveau pour controler les actions et la stratégie du robot
 
+## Lidar
+
+### [lidar](./lidar) : analyse des données du lidar - code réalisé par Seb 
+
 ## QR codes
 
 ### [aruco-decoder](./aruco-decoder): Décodage des qr-code sur les faces trésors
@@ -17,3 +21,7 @@ Code de haut niveau pour controler les actions et la stratégie du robot
 - [format_du_bash.txt](./protocole_transport_raspi/format_du_bash.txt) : format de la réception et de l'envoi de la librairie can-utils utilisée par ce code 
 
 ![diagramme](./protocole_transport_raspi/diagramme_explicatif.png)
+
+
+### note : 
+le dossier code_coupe_de_france contient le code du transport et du lidar (jamais testé) 
