@@ -12,7 +12,7 @@ Code de haut niveau pour controler les actions et la stratégie du robot
 
 ## Transport 
 
-### [protocole_transport_raspi](./protocole_transport_raspi) : protocole de transport avec acks permettant d'envoyer jusqu'à 96 octets de données 
+### [protocole_transport_raspi](./protocole_transport_raspi) : protocole de transport pour communiquer avec les STM - code réalisé par Aude 
 - [launch.py](./protocole_transport_raspi/launch.py) : lance un thread réception et un thread application : exécuter **python3 launch.py** pour lancer le code 
 - [api_envoi.py](./protocole_transport_raspi/api_envoi.py) : fonction **envoyer** 
 - [api_reception.py](./protocole_transport_raspi/api_reception.py) : fonctions **reception** et **process_mess** 
