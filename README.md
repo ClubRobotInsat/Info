@@ -8,11 +8,11 @@ Code de haut niveau pour controler les actions et la stratégie du robot
 
 ## QR codes
 
-### [aruco-decoder](./aruco-decoder): Décodage des qr-code sur les faces trésors
+### [aruco-decoder](./aruco-decoder) : Décodage des qr-code sur les faces trésors
 
 ## Transport 
 
-### [protocole_transport_raspi](./protocole_transport_raspi)
+### [protocole_transport_raspi](./protocole_transport_raspi) : protocole de transport avec acks permettant d'envoyer jusqu'à 96 octets de données 
 - [launch.py](./protocole_transport_raspi/launch.py) : lance un thread réception et un thread application : exécuter **python3 launch.py** pour lancer le code 
 - [api_envoi.py](./protocole_transport_raspi/api_envoi.py) : fonction **envoyer** 
 - [api_reception.py](./protocole_transport_raspi/api_reception.py) : fonctions **reception** et **process_mess** 
