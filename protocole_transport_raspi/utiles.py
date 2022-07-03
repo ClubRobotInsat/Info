@@ -22,14 +22,16 @@ class Trame(object):
 
     def to_string(self):
         # bytes d'en tête
-        trame_bytes = [hex(self.id_dest << 4 | self.id_or), hex(self.id_mes << 5 | self.seq << 1 | self.ack)]
+        first_byte = self.id_dest << 4 | self.id_or
+        second_byte = self.id_mes << 5 | self.seq << 1 | self.ack
+        trame_bytes = [f"{first_byte:02x}", f"{second_byte:02x}"]
         # bytes de data
         for d in self.data:
             trame_bytes.append(d)
         trame_str = "000#"  # un truc du cansend, je sais pas vraiment à quoi ça sert
         for byte in trame_bytes:
             trame_str += str(byte)
-            trame_str += " "
+            trame_str += "."
         trame_str = trame_str.replace("0x", "")
         return trame_str
 
@@ -64,4 +66,5 @@ buffer_reception = {key: [] for key in keys}
 
 # buffer où l'envoi met les acks reçus
 # chaque ligne du buffer contient le nb de trames du message, décrémenté à chaque réception de ack
-buffer_acks = {key: 0 for key in keys}
+buffer_acks = {key: -1 for key in keys}
+
