@@ -15,7 +15,7 @@ bus = can.Bus(interface='socketcan',
 def construire_en_tete(prio, id_dest, id_or):
     return (prio << 8) + (id_dest << 4) + id_or
 
-def envoyer(prio, dest, str_data):
+def envoyer(prio, dest, str_data): # TODO : tableau avec les actions à effectuer et une correspondance en bytes direct
     id_dest=tab_ids[dest]
     id_or=tab_ids["raspi"]
     en_tete=construire_en_tete(prio, id_dest, id_or)
