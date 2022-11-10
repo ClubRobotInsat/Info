@@ -1,4 +1,4 @@
-from utiles import tab_noms
+from utiles import reversed_tab_ids
 
 ############################### initialisation du can ##################################
 import can
@@ -18,4 +18,4 @@ def decomposer_en_tete(en_tete):
 
 for msg in bus:
     (prio, id_dest, id_or) = decomposer_en_tete(msg.arbitration_id)
-    print("message reçu de " + tab_noms[id_or] + " : " + msg.data.decode() + " à destination de " + tab_noms[id_or])
+    print("message reçu de " + reversed_tab_ids[id_or] + " : " + msg.data.decode() + " à destination de " + tab_noms[id_or])

@@ -23,7 +23,7 @@ def envoyer(prio, dest, str_data):
     # arbitration_id est un int!!
     # is_extended_id=False car id de 11 bits
     # data est un tableau d'octets!!
-    message=can.Message(check=True, arbitration_id=en_tete, is_extended_id=False, data=b'str_data')
+    message=can.Message(check=True, arbitration_id=en_tete, is_extended_id=False, data=bytearray(str_data,encoding="utf-8"))
     bus.send(message, timeout=0.2)
     # en l'état valeur par défaut pour timeout
     # TODO : est-ce que ce timeout doit être changé?
