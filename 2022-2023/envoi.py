@@ -1,5 +1,5 @@
 from utiles import tab_ids
-
+from time import sleep
 
 ############################### initialisation du can ##################################
 import can
@@ -25,9 +25,13 @@ def envoyer(prio, dest, data): # TODO : gérer correspondance actions / bytes
     # is_extended_id=False car id de 11 bits
     # data est un tableau d'octets!!
     message=can.Message(check=True, arbitration_id=en_tete, is_extended_id=False, data=bytearray(data, encoding="utf-8"))
-    bus.send(message, timeout=0.2)
-    # en l'état valeur par défaut pour timeout
-    # TODO : est-ce que ce timeout doit être changé?
+    try :
+        bus.send(message, timeout=0.2)# en l'état valeur par défaut pour timeout
+                                        # TODO : est-ce que ce timeout doit être changé?
+    except OSError:
+        sleep(0.06) #TODO : trouver une valeur cohérente
+        print(OSError + "je retente d'envoyer le message")
+        bus.send(message, timeout=0.2)
 
     # TODO : attendre la confirmation que tout s'est bien passé
 
