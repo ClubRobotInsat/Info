@@ -29,11 +29,13 @@ def envoyer(prio, dest, data): # TODO : gérer correspondance actions / bytes
         bus.send(message, timeout=0.2)# en l'état valeur par défaut pour timeout
                                         # TODO : est-ce que ce timeout doit être changé?
     except can.CanOperationError as e:
-        sleep(1) #TODO : trouver une valeur cohérente
+        sleep(0.015) # TODO : trouver une valeur cohérente?
+        # j'ai envoyé 100000 messages dans un for et les 100000 sont arrivés
         print(e, "je retente d'envoyer le message")
         bus.send(message, timeout=0.2)
 
     # TODO : attendre la confirmation que tout s'est bien passé
+    # potentiellement pas pour tous les messages! à réfléchir
 
 
 
