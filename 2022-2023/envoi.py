@@ -28,9 +28,9 @@ def envoyer(prio, dest, data): # TODO : gérer correspondance actions / bytes
     try :
         bus.send(message, timeout=0.2)# en l'état valeur par défaut pour timeout
                                         # TODO : est-ce que ce timeout doit être changé?
-    except OSError:
-        sleep(0.06) #TODO : trouver une valeur cohérente
-        print(OSError + "je retente d'envoyer le message")
+    except can.CanOperationError:
+        sleep(1) #TODO : trouver une valeur cohérente
+        print(can.CanOperationError + "je retente d'envoyer le message")
         bus.send(message, timeout=0.2)
 
     # TODO : attendre la confirmation que tout s'est bien passé

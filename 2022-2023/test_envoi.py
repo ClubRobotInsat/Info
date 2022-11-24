@@ -4,6 +4,6 @@ from time import sleep
 
 for dest in tab_ids.keys():
     for prio in range(1,7):
-        # sleep(1) #TODO : traiter l'exception quand on essaie d'envoyer trop de trucs en même temps
-        envoyer(prio,dest,"hola")
+        for i in range(500): # testons notre programme
+            envoyer(prio,dest,"hola")
 
