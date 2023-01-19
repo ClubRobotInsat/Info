@@ -1,25 +1,15 @@
+from traitement import construire_en_tete
 from utiles import tab_ids
-from time import sleep
-
-############################### initialisation du can ##################################
-import can
-
-bus = can.Bus(interface='socketcan',
-              channel='can0',
-              receive_own_messages=True)
 
 
-##########################################################################################
+# def set_bus_envoi():
+    # TODO udp_envoi ou can_envoi, regarder comment faire
 
 
 async def attendre_confirmation(confirmation_id):
     # si le message a besoin d'une confirmation, il doit venir avec une confirmation_id
     # assignée automatiquement?
     return
-
-
-def construire_en_tete(prio, id_dest, id_or):
-    return (prio << 8) + (id_dest << 4) + id_or
 
 
 # prio int, dest string, data string (pour l'instant)
@@ -32,24 +22,14 @@ def envoyer(prio, dest, data, attendre_confirmation=False,
     # arbitration_id est un int!!
     # is_extended_id=False car id de 11 bits
     # data est un tableau d'octets!!
-    message = can.Message(check=True, arbitration_id=en_tete, is_extended_id=False,
-                          data=bytearray(data, encoding="utf-8"))
+    # TODO message à envoyer
     # TODO : tester
     sent = False
     timeout = 0.015
-    while not sent:
 
-        try:
-            bus.send(message, timeout=0.2)  # en l'état valeur par défaut pour timeout
-            sent = True  # TODO : est-ce que ce timeout doit être changé?
-        except can.CanOperationError as e:
-            sleep(timeout)  # TODO : trouver une valeur cohérente?
-            # j'ai envoyé 100000 messages dans un for et les 100000 sont arrivés
-            timeout = (timeout + 0.015) % 0.1
-            print(e, "je retente d'envoyer le message")
-            bus.send(message, timeout=0.2)
+    ## TODO envoyer
 
-    if attendre_confirmation:
-        for msg in bus:
+    # if attendre_confirmation:
+        # for msg in bus:
             # TODO : async en python?
-            print("je fais des trucs")
+          #   print("je fais des trucs")
