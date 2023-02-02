@@ -1,5 +1,6 @@
 from utiles import tab_ids
 from time import sleep
+from threading import Event
 
 ############################### initialisation du can ##################################
 import can
@@ -12,21 +13,20 @@ bus = can.Bus(interface='socketcan',
 ##########################################################################################
 
 
-async def attendre_confirmation(confirmation_id):
-    # si le message a besoin d'une confirmation, il doit venir avec une confirmation_id
-    # assignée automatiquement?
-    return
+# le message passé est le message que l'on ATTEND (attention à l'ordre de id_dest et id_or)
+def attendre_confirmation(prio, id_dest, id_or, data):
+    event = Event()
+    dict[(prio,id_dest,id_or,data)]=event
+    event.wait()
+    
 
 
 def construire_en_tete(prio, id_dest, id_or):
     return (prio << 8) + (id_dest << 4) + id_or
 
 
-# prio int, dest string, data string (pour l'instant)
-def envoyer(prio, dest, data, attendre_confirmation=False,
-            confirmation_id=0):  # TODO : gérer correspondance actions / bytes
-    id_dest = tab_ids[dest]
-    id_or = tab_ids["raspi"]
+# prio int, id_dest int, id_or int, data string (pour l'instant)
+def envoyer(prio, id_dest, id_or, data):  # TODO : gérer correspondance actions / bytes
     en_tete = construire_en_tete(prio, id_dest, id_or)
     # check raise ValueError si pb ?
     # arbitration_id est un int!!
@@ -49,7 +49,4 @@ def envoyer(prio, dest, data, attendre_confirmation=False,
             print(e, "je retente d'envoyer le message")
             bus.send(message, timeout=0.2)
 
-    if attendre_confirmation:
-        for msg in bus:
-            # TODO : async en python?
-            print("je fais des trucs")
+
