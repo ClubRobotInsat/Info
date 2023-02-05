@@ -19,9 +19,10 @@ def decomposer_en_tete(en_tete):
 def recevoir():
     for msg in bus:
         (prio, id_dest, id_or) = decomposer_en_tete(msg.arbitration_id)
+        data = msg.data.decode() # c'est un string 
         print("message reçu de " + reversed_tab_ids[id_or] + " : " + msg.data.decode() + " à destination de " + reversed_tab_ids[id_dest])
         try:
-            event = dict_events[(prio,id_dest,id_or)]
+            event = dict_events[(prio,id_dest,id_or,data)]
             event.set()
         except:
             pass
