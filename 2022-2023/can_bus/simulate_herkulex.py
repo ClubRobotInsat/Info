@@ -9,7 +9,9 @@ bus = can.Bus(interface='socketcan',
 
 for msg in bus:
     (prio, id_dest, id_or) = decomposer_en_tete(msg.arbitration_id)
-    data=msg.data.decode("utf-8")
-    print("j'ai reçu " + data)
-    envoyer(prio,id_or,id_dest,data)
-    print("confirmation envoyée")
+
+    if (id_dest==2):    
+        data=msg.data.decode("utf-8")
+        print("j'ai reçu " + data)
+        envoyer(prio,id_or,id_dest,data)
+        print("confirmation envoyée")

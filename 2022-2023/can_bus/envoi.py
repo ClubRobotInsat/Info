@@ -19,7 +19,7 @@ def attendre_confirmation(prio, id_dest, id_or, data):
     event = Event()
     dict_events[(prio,id_dest,id_or,data)]=event
     # print(dict_events[(prio,id_dest,id_or,data)])
-    event.wait()
+    event.wait() # visiblement le set ne marche pas, on reste bloqué là 
     
 
 
@@ -36,7 +36,6 @@ def envoyer(prio, id_dest, id_or, data):  # TODO : gérer correspondance actions
     # data est un tableau d'octets!!
     message = can.Message(check=True, arbitration_id=en_tete, is_extended_id=False,
                           data=bytearray(data, encoding="utf-8"))
-    # TODO : tester
     sent = False
     timeout = 0.015
     while not sent:
