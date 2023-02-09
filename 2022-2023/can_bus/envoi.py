@@ -1,6 +1,7 @@
 from utiles import tab_ids
 from time import sleep
 from threading import Event
+from utiles import dict_events
 
 ############################### initialisation du can ##################################
 import can
@@ -16,7 +17,8 @@ bus = can.Bus(interface='socketcan',
 # le message passé est le message que l'on ATTEND (attention à l'ordre de id_dest et id_or)
 def attendre_confirmation(prio, id_dest, id_or, data):
     event = Event()
-    dict[(prio,id_dest,id_or,data)]=event
+    dict_events[(prio,id_dest,id_or,data)]=event
+    # print(dict_events[(prio,id_dest,id_or,data)])
     event.wait()
     
 

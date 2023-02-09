@@ -1,5 +1,6 @@
 from utiles import reversed_tab_ids
 from utiles import dict_events
+from time import sleep
 
 ############################### initialisation du can ##################################
 import can
@@ -23,6 +24,8 @@ def recevoir():
         print("message reçu de " + reversed_tab_ids[id_or] + " : " + msg.data.decode() + " à destination de " + reversed_tab_ids[id_dest])
         try:
             event = dict_events[(prio,id_dest,id_or,data)]
+            print("confirmation reçue")
             event.set()
         except:
-            pass
+            print("bruh")
+            
