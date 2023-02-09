@@ -15,3 +15,4 @@ for msg in bus:
         print("j'ai reçu " + data)
         envoyer(prio,id_or,id_dest,data)
         print("confirmation envoyée")
+        break 

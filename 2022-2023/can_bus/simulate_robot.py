@@ -16,6 +16,10 @@ async def bouger_bras(mouvement):
 
 
 async def main():
+    dict_events={}
+    thread_reception = Thread(target=reception.recevoir, args=())
+    thread_reception.setDaemon(True)
+    thread_reception.start()
     print("j'appelle bouger bras")
     tache = asyncio.create_task(bouger_bras("yo"))
     await tache
@@ -23,10 +27,7 @@ async def main():
 
 
 
-dict_events={}
-thread_reception = Thread(target=reception.recevoir, args=())
-thread_reception.start()
+
 asyncio.run(main())
-thread_reception.join()
 
 
