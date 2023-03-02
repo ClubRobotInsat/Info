@@ -1,6 +1,7 @@
-from utiles import tab_ids
-from envoi import envoyer
+from can_bus import envoyer
 from time import sleep
+# test : lancer recevoir en parallèle 
+
 
 for i in range(100000):
     print(i)
