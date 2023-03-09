@@ -1,5 +1,8 @@
 import can
-from can_bus.manager import decomposer_en_tete,envoyer
+import sys
+sys.path.append('/home/pi/Info/2022-2023/can_bus')
+from manager import recevoir
+from manager import decomposer_en_tete,envoyer
 
 
 bus = can.Bus(interface='socketcan',

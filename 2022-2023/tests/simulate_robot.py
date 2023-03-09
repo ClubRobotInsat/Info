@@ -1,5 +1,7 @@
 import asyncio
-from can_bus.manager import envoyer,attendre_confirmation,recevoir
+import sys
+sys.path.append('/home/pi/Info/2022-2023/can_bus')
+from manager import envoyer,attendre_confirmation,recevoir
 from threading import Thread 
 
 
@@ -19,7 +21,7 @@ async def main():
     thread_reception.setDaemon(True)
     thread_reception.start()
     print("j'appelle bouger bras")
-    tache = asyncio.create_task(bouger_bras("yo"))
+    tache = asyncio.create_task(bouger_bras("y"))
     await tache
     print("coucou j'ai appelé la fonction")
 

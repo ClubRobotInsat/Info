@@ -1,10 +1,10 @@
-from can_bus import bus,decomposer_en_tete,reversed_tab_ids,dict_events
+from __init__ import bus,reversed_tab_ids,dict_events
 from time import sleep
-from time import Event
+#from time import Event
+from threading import Event
 import can
 
-# l'en tête est un int
-def decomposer_en_tete(en_tete):
+def decomposer_en_tete(en_tete: int):
     return en_tete >> 8, (en_tete >> 4) & 15, en_tete & 15
 
 def construire_en_tete(prio, id_dest, id_or):
@@ -25,6 +25,9 @@ def recevoir():
         (prio, id_dest, id_or) = decomposer_en_tete(msg.arbitration_id)
         if (id_dest==1):
             data = msg.data.decode() # c'est un string 
+            print(prio)
+            print(id_or)
+            print(data)
             print("message reçu de " + reversed_tab_ids[id_or] + " : " + msg.data.decode() + " à destination de " + reversed_tab_ids[id_dest])
             try:
                 event = dict_events[(prio,id_dest,id_or,data)]
