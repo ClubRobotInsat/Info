@@ -1,12 +1,13 @@
 import cv2
 import imutils
-
+from math import sqrt
 # si le code ne détecte pas, vérifier bien le type d'aruco code et s'il est entourée d'un carré blanc
 
 def read():
     cap = cv2.VideoCapture(0)  # id 0 camera standard système
     aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_ARUCO_ORIGINAL)  # style TODO utiliser celui de la compete
     aruco_params = cv2.aruco.DetectorParameters_create()
+    taille_frame = 1000 #Taille de la frame
     if not cap.isOpened():
         raise "error opening video input"
 
@@ -15,13 +16,16 @@ def read():
 
         if ret:
 
-            frame = imutils.resize(frame, width=1000)  # resize chaque frame en 1000x1000
+            frame = imutils.resize(frame, width=taille_frame)  # resize chaque frame en 1000x1000
             (corners, ids, rejected) = cv2.aruco.detectMarkers(frame, aruco_dict,
                                                             parameters=aruco_params)  # corners position dans la frame
             # des coins du code
             # id de touts les codes détectés(peut-être liste de int)
             #
+            if len(rejected)>0:
+                print(rejected)
             if len(corners) > 0:  # si code détecté,
+                print("code détecté")
                 ids = ids.flatten()  # affiche dans le frame video la position des codes et leur ID
                 for (markerCorner, markerID) in zip(corners, ids):
                     corners = markerCorner.reshape((4, 2))
@@ -31,6 +35,11 @@ def read():
                     bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
                     bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
                     topLeft = (int(topLeft[0]), int(topLeft[1]))
+                    ##Calcul de la proportion du code dans l'image pour évaluer distance##
+                    #proportion_top = sqrt((topRight[1]-topLeft[1])**2+(topRight[0]-topLeft[0])**2)/taille_frame ##Calcul de la proportion ligne haute
+                    #proportion_bottom = sqrt((bottomRight[1]-bottomLeft[1])**2+(bottomRight[0]-bottomLeft[0])**2)/taille_frame ##Calcul proportion basse
+                    #prop_moy = (proportion_bottom+proportion_top)/2 ## Proportion moyenne
+                    ###### TODO implémenter fonction régression linéaire pour évaluer la distance #######
                     cv2.line(frame, topLeft, topRight, (0, 255, 0), 2)
                     cv2.line(frame, topRight, bottomRight, (0, 255, 0), 2)
                     cv2.line(frame, bottomRight, bottomLeft, (0, 255, 0), 2)
