@@ -1,3 +1,7 @@
+import sys
+sys.path.append('/home/pi/Info/2022-2023/')
+sys.path.append('/home/pi/Info/2022-2023/')
+
 import cv2
 
 
