@@ -151,7 +151,7 @@ if __name__ == '__main__' :
 
     i = 0
     objet_lidar = lidar(uart_port_lidar)
-    distances, angles, x, y = lidar.get_scan(True, True, True)
+    distances, angles, x, y = objet_lidar.get_scan(True, True, True)
 
     while(i<count) :
         distances, angles, x, y, adversaire = lidar.get_scan(True, True, True)
@@ -163,3 +163,4 @@ if __name__ == '__main__' :
         i += 1
     
     plt.show()
+    del objet_lidar
