@@ -151,10 +151,9 @@ if __name__ == '__main__' :
 
     i = 0
     objet_lidar = lidar(uart_port_lidar)
-    distances, angles, x, y = objet_lidar.get_scan(True, True, True)
 
     while(i<count) :
-        distances, angles, x, y, adversaire = lidar.get_scan(True, True, True)
+        distances, angles, x, y, adversaire = objet_lidar.get_scan(True, True, True)
         plt.xlim(-3000,3000)
         plt.ylim(-3000,3000)
         plt.plot(x,y,'bo', markersize=1)
