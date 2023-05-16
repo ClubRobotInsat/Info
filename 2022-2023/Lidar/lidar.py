@@ -15,8 +15,6 @@ import hokuyo
 import serial_port
 import numpy as np
 
-uart_port_lidar = '/dev/ttyACM0'
-
 class lidar() :
     """
     classe Lidar : Permet le contrôle et l'aqcisition des données du Lidar Hokuyo URG-04LX-UG01
@@ -145,3 +143,23 @@ class lidar() :
             print ("Objet détecté" + " à angle : " + str(angle) + "°   , distance :" +str(distance/10) + "cm")
         
         return adversaire_detecte
+    
+if __name__ == '__main__' :
+
+    uart_port_lidar = '/dev/ttyACM0'
+    count = 1000
+
+    i = 0
+    objet_lidar = lidar(uart_port_lidar)
+    distances, angles, x, y = lidar.get_scan(True, True, True)
+
+    while(i<count) :
+        distances, angles, x, y, adversaire = lidar.get_scan(True, True, True)
+        plt.xlim(-3000,3000)
+        plt.ylim(-3000,3000)
+        plt.plot(x,y,'bo', markersize=1)
+        plt.pause(0.001)
+        plt.clf()
+        i += 1
+    
+    plt.show()
