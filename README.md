@@ -57,6 +57,7 @@ Futur (?) main du robot. Pour le moment contient juste un appel à la fonction d
 
 ### tests
 Fichiers de tests divers et variés. 
-- file.py et utilisation_import.py : fichiers sans intérêt dont je me suis servie pour comprendre le fonctionnement des modules
-- simulate_herkulex.py : fichier envoyant un ack pour confirmer la réception d'un message de la raspi comme le ferait un STM quelconque dans le robot
-- simulate_robot.py : exemple d'utilisation des fonctions d'envoi et réception de messages en async (comme ce qui devra être fait dans le main du robot) 
+- **simulate_herkulex.py :** fichier envoyant un ack pour confirmer la réception d'un message de la raspi comme le ferait un STM quelconque dans le robot
+- **simulate_robot.py :** exemple d'utilisation des fonctions d'envoi et réception de messages en async (comme ce qui devra être fait dans le main du robot)
+- **test_envoi.py :** envoi d'un message en boucle 
+- **file.py et utilisation_import.py :** fichiers sans intérêt dont je me suis servie pour comprendre le fonctionnement des modules
