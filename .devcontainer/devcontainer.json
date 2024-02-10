@@ -28,14 +28,14 @@
     "ROS_DOMAIN_ID": "1"
   },
   "runArgs": [
-    "-p 3000:3000",
-    "-p 2222:22",
+    "-p3000:3000",
+    "-p2222:22",
     "-e", "DISPLAY=${env:DISPLAY}"
   ],
   "mounts": [
     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
     "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached",
-    "source=${localWorkspaceFolder},target=/home/ws/,type=bind",
+//    "source=${localWorkspaceFolder},target=/home/ws/,type=bind",
 //    "source=${localWorkspaceFolder}/../cache/ROS_DISTRO/install,target=/home/ws/install,type=bind",
 //    "source=${localWorkspaceFolder}/../cache/ROS_DISTRO/log,target=/home/ws/log,type=bind"
   ],
