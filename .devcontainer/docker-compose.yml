@@ -1,0 +1,21 @@
+# You should use the dev-container as explained in https://clubrobotinsat.github.io/doc/informatique/mise_en_place/ros2_dev_container_setup.html
+# If that version doesn't work, then you can use this docker-compose file "docker-compose up" and connect to it though remote dev with ssh
+version: '3.8'
+services:
+  ros_dev_container:
+    build: .
+    container_name: ros_dev_container
+    privileged: true
+    environment:
+      - DISPLAY=unix:0
+      - ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
+      - ROS_DOMAIN_ID=1
+    ports:
+      - "3000:3000"
+      - "2222:22"
+    volumes:
+      - "/tmp/.X11-unix:/tmp/.X11-unix"
+      - "/dev/dri:/dev/dri"
+      - "../..:/home/ws/src"
+      # Entrypoint to keep container running
+    entrypoint: ["tail", "-f", "/dev/null"]
