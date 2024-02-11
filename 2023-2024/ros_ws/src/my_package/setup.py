@@ -22,7 +22,8 @@ setup(
         # Add your nodes here
         'console_scripts': [
             'my_node = my_package.my_node:main',
-            'my_node2 = my_package.my_node2:main'
+            'my_node2 = my_package.my_node2:main',
+            'publisher_node = my_package.publisher:main'
         ],
     },
 )
