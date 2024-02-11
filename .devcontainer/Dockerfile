@@ -28,4 +28,4 @@ RUN echo "sudo service ssh restart > /dev/null" >> /home/$USERNAME/.bashrc
 
 # [Optional] Set the default user. Omit if you want to keep the default as root.
 USER $USERNAME
-CMD ["service ssh restart"]
+#CMD ["service ssh restart"]
